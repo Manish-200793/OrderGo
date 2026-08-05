@@ -16,7 +16,8 @@ async function startServer() {
 
   // Middleware
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
-  app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+  app.use(cors({ origin: [frontendUrl, 'http://localhost:5173'], credentials: true }));
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
