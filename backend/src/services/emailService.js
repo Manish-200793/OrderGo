@@ -12,15 +12,11 @@ function getTransporter() {
   if (transporter) return transporter;
 
   transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // use SSL/TLS
-    connectionTimeout: 10000, // Fail after 10 seconds, not 5 minutes
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
+    host: 'smtp.sendgrid.net',
+    port: 587,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: 'apikey', // SendGrid requires the exact string 'apikey' as the username
+      pass: process.env.SENDGRID_API_KEY,
     },
   });
 
