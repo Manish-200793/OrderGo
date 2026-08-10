@@ -306,18 +306,16 @@ async function forgotPassword(req, res) {
       name = rows[0]?.name;
     }
     
-    // FIRE AND FORGET: Trigger background email with retry logic
-    const { sendResetCodeEmailBackground } = require('../services/emailService');
-    sendResetCodeEmailBackground(email, name || 'User', code);
-    
-    console.log(`🔐 Reset code generated and sent to background queue for ${email}`);
+    const result = await sendResetCodeEmail(email, name || 'User', code);
+    console.log(`🔐 Reset code for ${email}: ${code}`);
 
     res.json({
       message: 'If an account with that email exists, a reset code has been sent.',
+      previewUrl: result.previewUrl || null,
     });
   } catch (err) {
-    console.error('Failed to process reset password request:', err);
-    res.status(500).json({ error: 'Failed to process request. Please try again.' });
+    console.error('Failed to send reset email:', err);
+    res.status(500).json({ error: 'Failed to send reset email. Please try again.' });
   }
 }
 
