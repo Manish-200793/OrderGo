@@ -13,6 +13,9 @@ function getTransporter() {
 
   transporter = nodemailer.createTransport({
     service: 'gmail',
+    pool: true, // Keep connections alive
+    maxConnections: 1, 
+    maxMessages: 100,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
@@ -60,10 +63,30 @@ async function sendResetCodeEmail(toEmail, userName, resetCode) {
   };
 
   const info = await transport.sendMail(mailOptions);
-  
-  console.log(`📧 Real reset code email sent to ${toEmail}`);
-
   return { messageId: info.messageId };
 }
 
-module.exports = { sendResetCodeEmail };
+/**
+ * Background Wrapper: Tries to send email, catches errors, and retries silently.
+ */
+function sendResetCodeEmailBackground(toEmail, userName, resetCode, attempt = 1) {
+  const MAX_RETRIES = 3;
+
+  sendResetCodeEmail(toEmail, userName, resetCode)
+    .then((info) => {
+      console.log(`📧 [SUCCESS] Reset code email sent to ${toEmail} (Attempt ${attempt})`);
+    })
+    .catch((err) => {
+      console.error(`❌ [ERROR] Failed to send email to ${toEmail} (Attempt ${attempt}):`, err.message);
+      if (attempt < MAX_RETRIES) {
+        console.log(`🔄 Retrying email to ${toEmail} in 2 seconds...`);
+        setTimeout(() => {
+          sendResetCodeEmailBackground(toEmail, userName, resetCode, attempt + 1);
+        }, 2000);
+      } else {
+        console.error(`🚨 [FATAL] Giving up on email to ${toEmail} after ${MAX_RETRIES} attempts.`);
+      }
+    });
+}
+
+module.exports = { sendResetCodeEmail, sendResetCodeEmailBackground };
