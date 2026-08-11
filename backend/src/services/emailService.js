@@ -40,9 +40,10 @@ async function sendResetCodeEmail(toEmail, userName, resetCode) {
     to: toEmail,
     from: {
       email: process.env.EMAIL_USER || 'ordergo2006@gmail.com',
-      name: 'OrderGo 🍽️',
+      name: 'OrderGo',
     },
-    subject: '🔐 Your OrderGo Password Reset Code',
+    subject: 'Your OrderGo Password Reset Code',
+    text: `Hi ${userName}, your OrderGo password reset code is: ${resetCode}. This code expires in 10 minutes. If you didn't request this, ignore this email.`,
     html: `
       <div style="max-width:480px;margin:0 auto;font-family:'Segoe UI',Arial,sans-serif;background:#0a0a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a4a;">
         <div style="background:linear-gradient(135deg,#ff6b35,#ff3d7f);padding:32px;text-align:center;">
