@@ -3,31 +3,79 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 /**
- * Email service using real Gmail SMTP
+ * Email service using Gmail SMTP with App Password.
+ *
+ * Requires these env vars:
+ *   EMAIL_USER  – full Gmail address (e.g. ordergo2006@gmail.com)
+ *   EMAIL_PASS  – 16-char App Password generated from Google Account settings
  */
 
 let transporter = null;
+let transporterVerified = false;
 
+/**
+ * Create (or return cached) nodemailer transporter using Gmail SMTP.
+ */
 function getTransporter() {
   if (transporter) return transporter;
 
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
+
+  if (!user || !pass) {
+    throw new Error(
+      'EMAIL_USER and EMAIL_PASS must be set in your .env file. ' +
+      'Generate an App Password at https://myaccount.google.com/apppasswords'
+    );
+  }
+
   transporter = nodemailer.createTransport({
-    host: 'smtp.sendgrid.net',
-    port: 587,
-    auth: {
-      user: 'apikey', // SendGrid requires the exact string 'apikey' as the username
-      pass: process.env.SENDGRID_API_KEY,
-    },
+    service: 'gmail',          // Uses smtp.gmail.com:465 under the hood
+    auth: { user, pass },
+    // Pool connections for better throughput if multiple emails are sent
+    pool: true,
+    maxConnections: 3,
+    maxMessages: 50,
   });
 
   return transporter;
 }
 
 /**
+ * Verify the SMTP connection is alive. Runs once and caches the result.
+ * Throws a descriptive error if credentials are wrong.
+ */
+async function ensureConnection() {
+  if (transporterVerified) return;
+
+  const t = getTransporter();
+  try {
+    await t.verify();
+    transporterVerified = true;
+    console.log('✅ Gmail SMTP connection verified');
+  } catch (err) {
+    // Reset so next call re-creates the transporter
+    transporter = null;
+    transporterVerified = false;
+
+    if (err.responseCode === 535 || err.code === 'EAUTH') {
+      throw new Error(
+        'Gmail authentication failed. Make sure EMAIL_PASS is a valid App Password ' +
+        '(not your regular Gmail password). Generate one at ' +
+        'https://myaccount.google.com/apppasswords'
+      );
+    }
+    throw new Error(`SMTP connection failed: ${err.message}`);
+  }
+}
+
+/**
  * Send a password reset code via email.
+ *
+ * Retries up to 3 times on transient failures.
  */
 async function sendResetCodeEmail(toEmail, userName, resetCode) {
-  const transport = getTransporter();
+  const MAX_RETRIES = 3;
 
   const mailOptions = {
     from: `"OrderGo 🍽️" <${process.env.EMAIL_USER}>`,
@@ -60,11 +108,39 @@ async function sendResetCodeEmail(toEmail, userName, resetCode) {
     `,
   };
 
-  const info = await transport.sendMail(mailOptions);
-  
-  console.log(`📧 Real reset code email sent to ${toEmail}`);
+  let lastError = null;
 
-  return { messageId: info.messageId };
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      await ensureConnection();
+
+      const transport = getTransporter();
+      const info = await transport.sendMail(mailOptions);
+
+      console.log(`📧 Reset code email sent to ${toEmail} (attempt ${attempt}, messageId: ${info.messageId})`);
+      return { messageId: info.messageId };
+    } catch (err) {
+      lastError = err;
+      console.error(`❌ Email send attempt ${attempt}/${MAX_RETRIES} failed:`, err.message);
+
+      // Don't retry on auth errors – they won't self-heal
+      if (err.message.includes('authentication failed') || err.responseCode === 535) {
+        break;
+      }
+
+      // Reset transporter so next attempt creates a fresh connection
+      transporter = null;
+      transporterVerified = false;
+
+      if (attempt < MAX_RETRIES) {
+        // Exponential back-off: 1s, 2s
+        await new Promise((r) => setTimeout(r, attempt * 1000));
+      }
+    }
+  }
+
+  // All retries exhausted
+  throw lastError;
 }
 
 module.exports = { sendResetCodeEmail };
