@@ -1,72 +1,30 @@
-const nodemailer = require('nodemailer');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 /**
- * Email service using Gmail SMTP with App Password.
+ * Email service using SendGrid Web API (HTTP).
  *
- * Requires these env vars:
- *   EMAIL_USER  – full Gmail address (e.g. ordergo2006@gmail.com)
- *   EMAIL_PASS  – 16-char App Password generated from Google Account settings
+ * Render free tier blocks SMTP ports (25, 465, 587), so we use the
+ * HTTP-based SendGrid API instead, which communicates over port 443.
+ *
+ * Requires:
+ *   SENDGRID_API_KEY  – SendGrid API key
+ *   EMAIL_USER        – verified sender email address on SendGrid
  */
 
-let transporter = null;
-let transporterVerified = false;
+let sgMail = null;
 
-/**
- * Create (or return cached) nodemailer transporter using Gmail SMTP.
- */
-function getTransporter() {
-  if (transporter) return transporter;
+function getSendGrid() {
+  if (sgMail) return sgMail;
 
-  const user = process.env.EMAIL_USER;
-  const pass = process.env.EMAIL_PASS;
-
-  if (!user || !pass) {
-    throw new Error(
-      'EMAIL_USER and EMAIL_PASS must be set in your .env file. ' +
-      'Generate an App Password at https://myaccount.google.com/apppasswords'
-    );
+  const apiKey = process.env.SENDGRID_API_KEY;
+  if (!apiKey) {
+    throw new Error('SENDGRID_API_KEY must be set in your .env file.');
   }
 
-  transporter = nodemailer.createTransport({
-    service: 'gmail',          // Uses smtp.gmail.com:465 under the hood
-    auth: { user, pass },
-    // Pool connections for better throughput if multiple emails are sent
-    pool: true,
-    maxConnections: 3,
-    maxMessages: 50,
-  });
-
-  return transporter;
-}
-
-/**
- * Verify the SMTP connection is alive. Runs once and caches the result.
- * Throws a descriptive error if credentials are wrong.
- */
-async function ensureConnection() {
-  if (transporterVerified) return;
-
-  const t = getTransporter();
-  try {
-    await t.verify();
-    transporterVerified = true;
-    console.log('✅ Gmail SMTP connection verified');
-  } catch (err) {
-    // Reset so next call re-creates the transporter
-    transporter = null;
-    transporterVerified = false;
-
-    if (err.responseCode === 535 || err.code === 'EAUTH') {
-      throw new Error(
-        'Gmail authentication failed. Make sure EMAIL_PASS is a valid App Password ' +
-        '(not your regular Gmail password). Generate one at ' +
-        'https://myaccount.google.com/apppasswords'
-      );
-    }
-    throw new Error(`SMTP connection failed: ${err.message}`);
-  }
+  sgMail = require('@sendgrid/mail');
+  sgMail.setApiKey(apiKey);
+  return sgMail;
 }
 
 /**
@@ -76,10 +34,14 @@ async function ensureConnection() {
  */
 async function sendResetCodeEmail(toEmail, userName, resetCode) {
   const MAX_RETRIES = 3;
+  const sg = getSendGrid();
 
-  const mailOptions = {
-    from: `"OrderGo 🍽️" <${process.env.EMAIL_USER}>`,
+  const msg = {
     to: toEmail,
+    from: {
+      email: process.env.EMAIL_USER || 'ordergo2006@gmail.com',
+      name: 'OrderGo 🍽️',
+    },
     subject: '🔐 Your OrderGo Password Reset Code',
     html: `
       <div style="max-width:480px;margin:0 auto;font-family:'Segoe UI',Arial,sans-serif;background:#0a0a1a;border-radius:16px;overflow:hidden;border:1px solid #2a2a4a;">
@@ -112,34 +74,30 @@ async function sendResetCodeEmail(toEmail, userName, resetCode) {
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      await ensureConnection();
+      const [response] = await sg.send(msg);
 
-      const transport = getTransporter();
-      const info = await transport.sendMail(mailOptions);
-
-      console.log(`📧 Reset code email sent to ${toEmail} (attempt ${attempt}, messageId: ${info.messageId})`);
-      return { messageId: info.messageId };
+      console.log(`📧 Reset code email sent to ${toEmail} (attempt ${attempt}, status: ${response.statusCode})`);
+      return { messageId: response.headers['x-message-id'] || 'sent' };
     } catch (err) {
       lastError = err;
-      console.error(`❌ Email send attempt ${attempt}/${MAX_RETRIES} failed:`, err.message);
+      const status = err.code || err.response?.statusCode;
+      const body = err.response?.body;
 
-      // Don't retry on auth errors – they won't self-heal
-      if (err.message.includes('authentication failed') || err.responseCode === 535) {
-        break;
+      console.error(`❌ Email send attempt ${attempt}/${MAX_RETRIES} failed (status: ${status}):`, 
+        body?.errors || err.message);
+
+      // Don't retry on auth/permission errors (401, 403) – they won't self-heal
+      if (status === 401 || status === 403) {
+        const errorMsg = body?.errors?.[0]?.message || 'SendGrid authentication failed';
+        throw new Error(`SendGrid auth error: ${errorMsg}`);
       }
 
-      // Reset transporter so next attempt creates a fresh connection
-      transporter = null;
-      transporterVerified = false;
-
       if (attempt < MAX_RETRIES) {
-        // Exponential back-off: 1s, 2s
         await new Promise((r) => setTimeout(r, attempt * 1000));
       }
     }
   }
 
-  // All retries exhausted
   throw lastError;
 }
 
