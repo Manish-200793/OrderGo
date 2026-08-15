@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Search, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Search, Sparkles, LogIn, UserPlus } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { menuAPI } from '../services/api';
 import MenuCard from '../components/MenuCard';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -12,6 +14,7 @@ const CATEGORIES = [
 ];
 
 export default function MenuPage() {
+  const { isAuthenticated } = useAuth();
   const [items, setItems] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -60,6 +63,27 @@ export default function MenuPage() {
           <h1 className="page-title">Our Menu</h1>
           <p className="page-subtitle">Fresh, delicious food made with love</p>
         </div>
+
+        {/* Guest Browsing Notice */}
+        {!isAuthenticated && (
+          <div className="guest-menu-banner glass-card animate-fade-in-up">
+            <div className="guest-banner-info">
+              <div className="guest-banner-icon">🍽️</div>
+              <div>
+                <h3 className="guest-banner-title">Browsing as Guest</h3>
+                <p className="guest-banner-desc">Sign in or create an account to view prices, customize items, and place orders.</p>
+              </div>
+            </div>
+            <div className="guest-banner-actions">
+              <Link to="/login" className="btn btn-secondary btn-sm">
+                <LogIn size={15} /> Login
+              </Link>
+              <Link to="/register" className="btn btn-primary btn-sm">
+                <UserPlus size={15} /> Sign Up
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Search Bar */}
         <div className="menu-search-bar glass-card">

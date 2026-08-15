@@ -1,10 +1,13 @@
-import { Plus, Minus, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Plus, Minus, Star, LogIn } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { formatPrice, CATEGORY_CONFIG } from '../utils/formatters';
 import './MenuCard.css';
 
 export default function MenuCard({ item }) {
-  const { items: cartItems, addItem, updateQuantity, removeItem } = useCart();
+  const { isAuthenticated } = useAuth();
+  const { items: cartItems, addItem, updateQuantity } = useCart();
   const cartItem = cartItems.find(i => i.item_id === item.item_id);
   const quantity = cartItem?.quantity || 0;
 
@@ -22,7 +25,7 @@ export default function MenuCard({ item }) {
       <div className="menu-card-content">
         <div className="menu-card-header">
           <h3 className="menu-card-name">{item.name}</h3>
-          <span className="menu-card-price">{formatPrice(item.price)}</span>
+          {isAuthenticated && <span className="menu-card-price">{formatPrice(item.price)}</span>}
         </div>
 
         <p className="menu-card-desc">{item.description}</p>
@@ -39,27 +42,37 @@ export default function MenuCard({ item }) {
           )}
         </div>
 
-        {item.is_available ? (
-          <div className="menu-card-actions">
-            {quantity > 0 ? (
-              <div className="quantity-control">
-                <button className="qty-btn" onClick={() => updateQuantity(item.item_id, quantity - 1)}>
-                  <Minus size={16} />
+        <div className="menu-card-actions">
+          {isAuthenticated ? (
+            item.is_available ? (
+              quantity > 0 ? (
+                <div className="quantity-control">
+                  <button className="qty-btn" onClick={() => updateQuantity(item.item_id, quantity - 1)} aria-label="Decrease quantity">
+                    <Minus size={16} />
+                  </button>
+                  <span className="qty-value">{quantity}</span>
+                  <button className="qty-btn" onClick={() => updateQuantity(item.item_id, quantity + 1)} aria-label="Increase quantity">
+                    <Plus size={16} />
+                  </button>
+                </div>
+              ) : (
+                <button className="btn btn-primary btn-sm w-full" onClick={() => addItem(item)}>
+                  <Plus size={16} /> Add to Cart
                 </button>
-                <span className="qty-value">{quantity}</span>
-                <button className="qty-btn" onClick={() => updateQuantity(item.item_id, quantity + 1)}>
-                  <Plus size={16} />
-                </button>
-              </div>
+              )
             ) : (
-              <button className="btn btn-primary btn-sm w-full" onClick={() => addItem(item)}>
-                <Plus size={16} /> Add to Cart
-              </button>
-            )}
-          </div>
-        ) : (
-          <button className="btn btn-secondary btn-sm w-full" disabled>Unavailable</button>
-        )}
+              <button className="btn btn-secondary btn-sm w-full" disabled>Unavailable</button>
+            )
+          ) : (
+            item.is_available ? (
+              <Link to="/login" className="btn btn-secondary btn-sm w-full menu-card-login-btn">
+                <LogIn size={15} /> Login to Order
+              </Link>
+            ) : (
+              <button className="btn btn-secondary btn-sm w-full" disabled>Unavailable</button>
+            )
+          )}
+        </div>
       </div>
     </div>
   );
