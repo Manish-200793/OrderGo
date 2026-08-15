@@ -22,7 +22,7 @@
   width: 48px;
   height: 48px;
   border-radius: var(--radius-full);
-  background: var(--bg-tertiary);
+  background: var(--bg-secondary);
   border: 2px solid var(--border-subtle);
   display: flex;
   align-items: center;
@@ -33,9 +33,9 @@
 }
 
 .status-step.active .status-dot {
-  background: var(--bg-card);
+  background: white;
   border-color: var(--accent-primary);
-  box-shadow: 0 0 16px var(--accent-glow);
+  box-shadow: 0 0 12px var(--accent-glow);
 }
 
 .status-step.current .status-dot {
@@ -87,7 +87,7 @@
 }
 
 .status-line.filled {
-  background: var(--accent-gradient);
+  background: var(--accent-primary);
 }
 
 .status-cancelled-msg {
@@ -96,10 +96,10 @@
   justify-content: center;
   gap: var(--space-md);
   padding: var(--space-lg);
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.2);
   border-radius: var(--radius-lg);
-  color: var(--status-cancelled);
+  color: #DC2626;
   font-weight: 600;
   font-size: var(--font-size-lg);
 }

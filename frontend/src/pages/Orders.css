@@ -2,7 +2,7 @@
   display: flex;
   gap: var(--space-xs);
   margin-bottom: var(--space-xl);
-  background: var(--bg-glass);
+  background: var(--bg-secondary);
   border-radius: var(--radius-full);
   padding: 4px;
   width: fit-content;
@@ -26,7 +26,7 @@
 }
 
 .order-tab.active {
-  background: var(--accent-gradient);
+  background: var(--accent-primary);
   color: white;
   font-weight: 600;
 }
@@ -67,7 +67,7 @@
 
 .order-item-tag {
   padding: 0.2rem 0.6rem;
-  background: var(--bg-glass);
+  background: var(--bg-secondary);
   border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
   color: var(--text-secondary);

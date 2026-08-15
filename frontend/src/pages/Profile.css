@@ -14,7 +14,7 @@
   width: 80px;
   height: 80px;
   border-radius: var(--radius-full);
-  background: var(--accent-gradient);
+  background: var(--accent-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,6 +25,7 @@
 .profile-card h2 {
   font-size: var(--font-size-xl);
   margin-bottom: var(--space-xs);
+  color: var(--text-primary);
 }
 
 .profile-email {

@@ -40,7 +40,7 @@
   width: 56px;
   height: 56px;
   border-radius: var(--radius-md);
-  background: var(--bg-tertiary);
+  background: var(--bg-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,7 +88,7 @@
 
 .cart-item-remove:hover {
   color: var(--status-cancelled);
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 68, 68, 0.06);
 }
 
 /* Summary */
@@ -153,8 +153,8 @@
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md);
-  background: var(--bg-glass);
-  border: 1px solid var(--border-subtle);
+  background: white;
+  border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-md);
   cursor: pointer;
   color: var(--text-primary);
@@ -168,7 +168,7 @@
 
 .payment-option.active {
   border-color: var(--accent-primary);
-  background: rgba(255, 107, 53, 0.05);
+  background: rgba(16, 185, 129, 0.04);
   box-shadow: 0 0 0 2px var(--accent-glow);
 }
 

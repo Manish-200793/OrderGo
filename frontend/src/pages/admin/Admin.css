@@ -18,12 +18,10 @@
 }
 
 .admin-sidebar-header h2 {
+  font-family: var(--font-display);
   font-size: var(--font-size-lg);
   font-weight: 700;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-primary);
   margin-bottom: var(--space-lg);
   padding-bottom: var(--space-md);
   border-bottom: 1px solid var(--border-subtle);
@@ -49,13 +47,12 @@
 
 .admin-nav-link:hover {
   color: var(--text-primary);
-  background: var(--bg-glass);
+  background: var(--bg-secondary);
 }
 
 .admin-nav-link.active {
   color: white;
-  background: var(--accent-gradient);
-  box-shadow: 0 4px 12px var(--accent-glow);
+  background: var(--accent-primary);
 }
 
 .admin-content {
@@ -82,12 +79,10 @@
 }
 
 .stat-value {
+  font-family: var(--font-display);
   font-size: var(--font-size-3xl);
   font-weight: 800;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-primary);
 }
 
 .stat-label {

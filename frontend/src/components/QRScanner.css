@@ -4,7 +4,8 @@
   margin: 0 auto;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--bg-card);
+  background: white;
+  border: 1px solid var(--border-subtle);
 }
 
 .qr-scanner-container video {
@@ -32,7 +33,7 @@
 }
 
 #qr-reader__dashboard_section_csr button:hover {
-  background: var(--accent-secondary);
+  background: #059669;
 }
 
 #qr-reader__dashboard_section_swaplink {
