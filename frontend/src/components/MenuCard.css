@@ -27,6 +27,17 @@
   background: var(--bg-secondary);
 }
 
+.menu-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-base);
+}
+
+.menu-card:hover .menu-card-img {
+  transform: scale(1.05);
+}
+
 .menu-card-image-placeholder {
   display: flex;
   align-items: center;

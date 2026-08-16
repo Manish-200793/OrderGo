@@ -2,12 +2,14 @@ import { Link } from 'react-router-dom';
 import { Plus, Minus, Star, LogIn } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { useState } from 'react';
 import { formatPrice, CATEGORY_CONFIG } from '../utils/formatters';
 import './MenuCard.css';
 
 export default function MenuCard({ item }) {
   const { isAuthenticated } = useAuth();
   const { items: cartItems, addItem, updateQuantity } = useCart();
+  const [imageError, setImageError] = useState(false);
   const cartItem = cartItems.find(i => i.item_id === item.item_id);
   const quantity = cartItem?.quantity || 0;
 
@@ -16,9 +18,18 @@ export default function MenuCard({ item }) {
       {item.is_daily_special && <span className="badge badge-special menu-card-badge">⭐ Today's Special</span>}
 
       <div className="menu-card-image">
-        <div className="menu-card-image-placeholder">
-          <span>{CATEGORY_CONFIG[item.category]?.emoji || '🍽️'}</span>
-        </div>
+        {item.image_url && !imageError ? (
+          <img 
+            src={item.image_url} 
+            alt={item.name} 
+            className="menu-card-img"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div className="menu-card-image-placeholder">
+            <span>{CATEGORY_CONFIG[item.category]?.emoji || '🍽️'}</span>
+          </div>
+        )}
         {!item.is_available && <div className="menu-card-sold-out">Sold Out</div>}
       </div>
 
