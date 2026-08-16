@@ -5,9 +5,9 @@
   right: 0;
   z-index: 1000;
   height: var(--navbar-height);
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -30,11 +30,11 @@
 
 .navbar-logo strong {
   font-weight: 800;
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 .navbar-logo svg {
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 .navbar-toggle {
@@ -61,7 +61,7 @@
   font-size: var(--font-size-sm);
   font-weight: 500;
   border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
   border: none;
   background: none;
   cursor: pointer;
@@ -74,7 +74,8 @@
 }
 
 .nav-link-admin {
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
+  font-weight: 600;
 }
 
 .cart-link {
@@ -93,10 +94,9 @@
   font-size: 11px;
   font-weight: 700;
   background: var(--accent-primary);
-  color: white;
+  color: #FFFFFF;
   border-radius: var(--radius-full);
   padding: 0 4px;
-  animation: scaleIn 0.3s var(--transition-spring);
 }
 
 .nav-user {
@@ -120,6 +120,7 @@
 
 .logout-btn:hover {
   color: var(--status-cancelled) !important;
+  background: rgba(239, 68, 68, 0.08) !important;
 }
 
 .nav-auth {
@@ -140,7 +141,7 @@
     left: 0;
     right: 0;
     background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(12px);
     flex-direction: column;
     padding: var(--space-lg);
     gap: var(--space-sm);

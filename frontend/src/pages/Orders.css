@@ -27,7 +27,7 @@
 
 .order-tab.active {
   background: var(--accent-primary);
-  color: white;
+  color: #FFFFFF !important;
   font-weight: 600;
 }
 
@@ -42,6 +42,7 @@
   padding: var(--space-lg);
   color: var(--text-primary);
   text-decoration: none;
+  background: #FFFFFF;
 }
 
 .order-card-header {
@@ -87,7 +88,7 @@
 
 .order-total {
   font-weight: 700;
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 .order-date {
@@ -98,10 +99,10 @@
 
 .order-arrow {
   color: var(--text-muted);
-  transition: transform var(--transition-fast);
+  transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
 .order-card:hover .order-arrow {
-  transform: translateX(4px);
-  color: var(--accent-primary);
+  transform: translateX(3px);
+  color: var(--accent-primary-hover);
 }

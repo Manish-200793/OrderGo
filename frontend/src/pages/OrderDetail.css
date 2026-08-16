@@ -8,6 +8,7 @@
 .order-section {
   padding: var(--space-xl);
   margin-bottom: var(--space-lg);
+  background: #FFFFFF;
 }
 
 .section-heading {
@@ -61,6 +62,7 @@
 
 .order-detail-item-info strong {
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 .order-detail-item-info span {
@@ -85,7 +87,7 @@
 }
 
 .order-detail-total span:last-child {
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 /* QR Code */
@@ -130,6 +132,7 @@
   background: var(--bg-secondary);
   padding: 2px 8px;
   border-radius: var(--radius-sm);
+  color: var(--text-primary);
 }
 
 /* Feedback */
@@ -146,7 +149,8 @@
 
 .feedback-done {
   font-size: var(--font-size-xs);
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
+  font-weight: 600;
 }
 
 @media (max-width: 900px) {

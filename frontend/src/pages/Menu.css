@@ -4,8 +4,8 @@
   justify-content: space-between;
   gap: var(--space-md);
   padding: var(--space-md) var(--space-lg);
-  margin-bottom: var(--space-lg);
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(249, 115, 22, 0.05) 100%);
+  margin-bottom: var(--space-xl);
+  background: var(--accent-tint);
   border: 1.5px solid var(--border-accent);
   border-radius: var(--radius-lg);
 }
@@ -23,7 +23,7 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  background: white;
+  background: #FFFFFF;
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-sm);
   flex-shrink: 0;
@@ -68,9 +68,14 @@
   gap: var(--space-md);
   padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-lg);
-  background: white;
+  background: #FFFFFF;
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-lg);
+}
+
+.menu-search-bar:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
 .search-icon {
@@ -110,7 +115,7 @@
   align-items: center;
   gap: var(--space-xs);
   padding: 0.6rem 1.2rem;
-  background: white;
+  background: #FFFFFF;
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-full);
   color: var(--text-secondary);
@@ -122,15 +127,15 @@
 }
 
 .category-tab:hover {
-  background: var(--bg-secondary);
-  border-color: var(--border-medium);
-  color: var(--text-primary);
+  background: var(--accent-tint);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 .category-tab.active {
   background: var(--accent-primary);
   border-color: var(--accent-primary);
-  color: white;
+  color: #FFFFFF !important;
   font-weight: 600;
 }
 

@@ -9,8 +9,8 @@
 
 .loading-spinner {
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,16 +23,20 @@
   border: 3px solid var(--border-subtle);
   border-top-color: var(--accent-primary);
   border-radius: var(--radius-full);
-  animation: spin 1s linear infinite;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .spinner-logo {
-  font-size: 1.5rem;
-  animation: pulse 1.5s ease-in-out infinite;
+  font-size: 1.25rem;
 }
 
 .loading-text {
   color: var(--text-muted);
   font-size: var(--font-size-sm);
-  animation: pulse 1.5s ease-in-out infinite;
+  font-weight: 500;
 }

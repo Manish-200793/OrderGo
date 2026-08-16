@@ -1,5 +1,5 @@
 /* ============================================
-   Staff Dashboard — Clean Light Theme
+   Staff Dashboard — Professional Orange & White Theme
    ============================================ */
 
 .staff-dashboard {
@@ -48,12 +48,8 @@
 }
 
 .staff-refresh-indicator.refreshing {
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
   border-color: var(--border-accent);
-}
-
-.staff-refresh-indicator.refreshing svg {
-  animation: spin 1s linear infinite;
 }
 
 /* --- Stats Grid --- */
@@ -69,10 +65,7 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-}
-
-.staff-stat-card:hover {
-  transform: none;
+  background: #FFFFFF;
 }
 
 .staff-stat-card::before {
@@ -85,25 +78,11 @@
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
-.staff-stat-card.stat-pending::before {
-  background: var(--status-pending);
-}
-
-.staff-stat-card.stat-preparing::before {
-  background: var(--status-preparing);
-}
-
-.staff-stat-card.stat-ready::before {
-  background: var(--status-ready);
-}
-
-.staff-stat-card.stat-completed::before {
-  background: var(--status-completed);
-}
-
-.staff-stat-card.stat-cancelled::before {
-  background: var(--status-cancelled);
-}
+.staff-stat-card.stat-pending::before { background: var(--status-pending); }
+.staff-stat-card.stat-preparing::before { background: var(--status-preparing); }
+.staff-stat-card.stat-ready::before { background: var(--status-ready); }
+.staff-stat-card.stat-completed::before { background: var(--status-completed); }
+.staff-stat-card.stat-cancelled::before { background: var(--status-cancelled); }
 
 .staff-stat-icon {
   margin-bottom: var(--space-sm);
@@ -150,7 +129,7 @@
   align-items: center;
   gap: var(--space-xs);
   padding: 0.55rem 1.1rem;
-  background: white;
+  background: #FFFFFF;
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-full);
   color: var(--text-secondary);
@@ -161,15 +140,15 @@
 }
 
 .staff-filter-btn:hover {
-  background: var(--bg-secondary);
-  border-color: var(--border-medium);
-  color: var(--text-primary);
+  background: var(--accent-tint);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 .staff-filter-btn.active {
   background: var(--accent-primary);
   border-color: var(--accent-primary);
-  color: white;
+  color: #FFFFFF !important;
 }
 
 .staff-filter-count {
@@ -179,23 +158,22 @@
   min-width: 20px;
   height: 20px;
   padding: 0 5px;
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.08);
   border-radius: var(--radius-full);
   font-size: 0.65rem;
   font-weight: 700;
 }
 
-.staff-filter-btn:not(.active) .staff-filter-count {
-  background: var(--bg-secondary);
+.staff-filter-btn.active .staff-filter-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
 }
 
-/* Pulse dot on pending filter */
 .staff-filter-pulse {
   width: 8px;
   height: 8px;
   background: var(--status-pending);
   border-radius: 50%;
-  animation: pulse 1.5s ease-in-out infinite;
 }
 
 /* --- Order Cards Grid --- */
@@ -208,15 +186,10 @@
 .staff-order-card {
   padding: 0;
   overflow: hidden;
-  animation: fadeInUp 0.4s ease-out forwards;
   position: relative;
+  background: #FFFFFF;
 }
 
-.staff-order-card:hover {
-  transform: translateY(-3px);
-}
-
-/* Status-colored left border */
 .staff-order-card::after {
   content: '';
   position: absolute;
@@ -227,27 +200,12 @@
   border-radius: var(--radius-lg) 0 0 var(--radius-lg);
 }
 
-.staff-order-card.order-pending::after {
-  background: var(--status-pending);
-}
+.staff-order-card.order-pending::after { background: var(--status-pending); }
+.staff-order-card.order-preparing::after { background: var(--status-preparing); }
+.staff-order-card.order-ready::after { background: var(--status-ready); }
 
-.staff-order-card.order-preparing::after {
-  background: var(--status-preparing);
-}
-
-.staff-order-card.order-ready::after {
-  background: var(--status-ready);
-}
-
-/* Pending pulse glow */
 .staff-order-card.order-pending {
-  border-color: rgba(245, 158, 11, 0.2);
-  animation: fadeInUp 0.4s ease-out forwards, pendingGlow 2.5s ease-in-out infinite;
-}
-
-@keyframes pendingGlow {
-  0%, 100% { box-shadow: var(--shadow-card), 0 0 0 rgba(245, 158, 11, 0); }
-  50% { box-shadow: var(--shadow-card), 0 0 12px rgba(245, 158, 11, 0.08); }
+  border-color: rgba(245, 158, 11, 0.3);
 }
 
 /* Card Header */
@@ -294,7 +252,7 @@
 }
 
 .staff-customer-icon {
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
   flex-shrink: 0;
 }
 
@@ -306,12 +264,12 @@
 
 .staff-customer-roll {
   font-size: var(--font-size-sm);
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
   font-weight: 600;
-  background: rgba(16, 185, 129, 0.08);
+  background: rgba(249, 115, 22, 0.08);
   padding: 2px 10px;
   border-radius: var(--radius-full);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(249, 115, 22, 0.25);
 }
 
 .staff-customer-phone {
@@ -385,7 +343,7 @@
 .staff-order-total {
   font-size: var(--font-size-lg);
   font-weight: 800;
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 .staff-payment-badge {
@@ -414,29 +372,12 @@
   align-items: center;
   gap: 6px;
   padding: 0.5rem 1rem;
-  border: none;
+  border: 1.5px solid transparent;
   border-radius: var(--radius-md);
   font-size: var(--font-size-xs);
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-base);
-  position: relative;
-  overflow: hidden;
-}
-
-.staff-action-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-  transition: left 0.5s;
-}
-
-.staff-action-btn:hover::before {
-  left: 100%;
+  transition: all var(--transition-fast);
 }
 
 .staff-action-btn:disabled {
@@ -446,45 +387,50 @@
 
 .staff-action-btn.action-preparing {
   background: rgba(59, 130, 246, 0.1);
-  color: #2563EB;
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: #2563EB !important;
+  border-color: rgba(59, 130, 246, 0.25);
 }
 
 .staff-action-btn.action-preparing:hover:not(:disabled) {
-  background: rgba(59, 130, 246, 0.2);
-  transform: translateY(-1px);
+  background: #2563EB;
+  color: #FFFFFF !important;
+  border-color: #2563EB;
 }
 
 .staff-action-btn.action-ready {
-  background: rgba(16, 185, 129, 0.1);
-  color: #059669;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: rgba(249, 115, 22, 0.1);
+  color: #EA580C !important;
+  border-color: rgba(249, 115, 22, 0.25);
 }
 
 .staff-action-btn.action-ready:hover:not(:disabled) {
-  background: rgba(16, 185, 129, 0.2);
-  transform: translateY(-1px);
+  background: #EA580C;
+  color: #FFFFFF !important;
+  border-color: #EA580C;
 }
 
 .staff-action-btn.action-complete {
   background: var(--accent-primary);
-  color: white;
-  border: none;
+  color: #FFFFFF !important;
+  border-color: var(--accent-primary);
 }
 
 .staff-action-btn.action-complete:hover:not(:disabled) {
-  background: #059669;
-  transform: translateY(-1px);
+  background: var(--accent-primary-hover);
+  border-color: var(--accent-primary-hover);
+  color: #FFFFFF !important;
 }
 
 .staff-action-btn.action-cancel {
   background: rgba(239, 68, 68, 0.08);
-  color: #DC2626;
-  border: 1px solid rgba(239, 68, 68, 0.15);
+  color: #DC2626 !important;
+  border-color: rgba(239, 68, 68, 0.2);
 }
 
 .staff-action-btn.action-cancel:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.15);
+  background: #DC2626;
+  border-color: #DC2626;
+  color: #FFFFFF !important;
 }
 
 /* --- Empty State --- */

@@ -33,29 +33,18 @@
 }
 
 .status-step.active .status-dot {
-  background: white;
+  background: #FFFFFF;
   border-color: var(--accent-primary);
-  box-shadow: 0 0 12px var(--accent-glow);
+  box-shadow: 0 0 10px var(--accent-glow);
 }
 
 .status-step.current .status-dot {
   border-color: var(--accent-primary);
-  animation: float 2s ease-in-out infinite;
+  background: #FFFDFB;
 }
 
 .status-icon {
   font-size: 1.2rem;
-}
-
-.status-pulse {
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  border-radius: var(--radius-full);
-  border: 2px solid var(--accent-primary);
-  animation: pulse 2s ease-in-out infinite;
 }
 
 .status-label {
@@ -71,7 +60,7 @@
 }
 
 .status-step.current .status-label {
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
   font-weight: 700;
 }
 
@@ -83,7 +72,7 @@
   height: 2px;
   background: var(--border-subtle);
   z-index: 1;
-  transition: background var(--transition-slow);
+  transition: background-color var(--transition-slow);
 }
 
 .status-line.filled {
