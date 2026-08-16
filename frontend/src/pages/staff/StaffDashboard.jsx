@@ -155,8 +155,6 @@ export default function StaffDashboard() {
         return { label: 'Start Preparing', nextStatus: 'preparing', className: 'action-preparing', icon: <CookingPot size={14} /> };
       case 'preparing':
         return { label: 'Mark Ready', nextStatus: 'ready', className: 'action-ready', icon: <HandPlatter size={14} /> };
-      case 'ready':
-        return { label: 'Hand Over', nextStatus: 'completed', className: 'action-complete', icon: <CircleCheck size={14} /> };
       default:
         return null;
     }
