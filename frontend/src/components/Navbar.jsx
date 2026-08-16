@@ -1,13 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User, LogOut, LayoutDashboard, UtensilsCrossed, Menu, X, ChefHat } from 'lucide-react';
+import { ShoppingCart, User, LogOut, LayoutDashboard, UtensilsCrossed, Menu, X, ChefHat, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { useTheme } from '../context/ThemeContext';
 import { useState } from 'react';
 import './Navbar.css';
 
 export default function Navbar() {
   const { isAuthenticated, isAdmin, isStaff, user, logout } = useAuth();
   const { itemCount } = useCart();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -86,6 +88,11 @@ export default function Navbar() {
               </button>
             </div>
           )}
+          
+          <div style={{ width: '1px', height: '24px', background: 'var(--border-subtle)', margin: '0 4px', display: 'none' }} className="theme-divider"></div>
+          <button className="nav-link" onClick={toggleTheme} title="Toggle Theme" aria-label="Toggle Theme" style={{ display: 'flex', justifyContent: 'center' }}>
+            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          </button>
         </div>
       </div>
     </nav>

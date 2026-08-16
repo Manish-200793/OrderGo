@@ -93,6 +93,39 @@
   --sidebar-width: 280px;
 }
 
+/* --- Dark Theme Overrides --- */
+[data-theme="dark"] {
+  /* Colors — Deep Space Blue & Vibrant Orange */
+  --bg-primary: #0A0A14;
+  --bg-secondary: #121220;
+  --bg-tertiary: #1C1C2C;
+  --bg-card: #141424;
+  --bg-glass: rgba(20, 20, 36, 0.7);
+  --bg-glass-hover: rgba(28, 28, 44, 0.85);
+  --bg-glass-active: rgba(35, 35, 55, 0.95);
+
+  /* Text Hierarchy */
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.15);
+
+  /* Shadows (Darkened for depth) */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Adjust subtle background pattern for dark mode */
+[data-theme="dark"] body::before {
+  background-image: radial-gradient(circle at 15% 50%, rgba(249, 115, 22, 0.06), transparent 35%),
+                    radial-gradient(circle at 85% 30%, rgba(249, 115, 22, 0.04), transparent 45%);
+}
+
 /* --- Reset --- */
 *,
 *::before,
