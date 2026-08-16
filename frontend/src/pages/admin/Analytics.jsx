@@ -24,7 +24,7 @@ export default function Analytics() {
 
   if (loading) return <LoadingSpinner text="Loading analytics..." />;
 
-  const dailyData = analytics?.daily_revenue || [];
+  const dailyData = analytics?.daily_revenue?.map(d => ({ ...d, revenue: Number(d.revenue) })) || [];
   const hourLabels = peakHours.map(h => ({ ...h, label: `${h.hour}:00` }));
 
   return (
@@ -38,11 +38,12 @@ export default function Analytics() {
           <ResponsiveContainer>
             <LineChart data={dailyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-              <XAxis dataKey="date" stroke="#a0a0c0" fontSize={12} />
-              <YAxis stroke="#a0a0c0" fontSize={12} tickFormatter={v => `₹${v}`} />
+              <XAxis dataKey="date" stroke="#475569" fontSize={12} />
+              <YAxis stroke="#475569" fontSize={12} tickFormatter={v => `₹${v}`} />
               <Tooltip
-                contentStyle={{ background: '#1a1a3e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8 }}
-                labelStyle={{ color: '#f0f0ff' }}
+                contentStyle={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8 }}
+                labelStyle={{ color: '#475569', fontWeight: 600, marginBottom: '4px' }}
+                itemStyle={{ color: '#0F172A', fontWeight: 500 }}
                 formatter={(value) => [`₹${value}`, 'Revenue']}
               />
               <Line type="monotone" dataKey="revenue" stroke="#ff6b35" strokeWidth={3} dot={{ fill: '#ff6b35', r: 5 }} />
@@ -59,10 +60,12 @@ export default function Analytics() {
             <ResponsiveContainer>
               <BarChart data={hourLabels}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="label" stroke="#a0a0c0" fontSize={11} />
-                <YAxis stroke="#a0a0c0" fontSize={12} />
+                <XAxis dataKey="label" stroke="#475569" fontSize={11} />
+                <YAxis stroke="#475569" fontSize={12} />
                 <Tooltip
-                  contentStyle={{ background: '#1a1a3e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8 }}
+                  contentStyle={{ background: '#FFFFFF', border: '1px solid #E2E8F0', borderRadius: 8 }}
+                  labelStyle={{ color: '#475569', fontWeight: 600, marginBottom: '4px' }}
+                  itemStyle={{ color: '#0F172A', fontWeight: 500 }}
                   formatter={(value) => [value, 'Orders']}
                 />
                 <Bar dataKey="order_count" fill="url(#barGradient)" radius={[4, 4, 0, 0]} />
