@@ -13,7 +13,23 @@ const FEATURES = [
 ];
 
 export default function Home() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isAdmin, isStaff } = useAuth();
+
+  const heroTarget = !isAuthenticated
+    ? '/register'
+    : isAdmin
+      ? '/admin'
+      : isStaff
+        ? '/staff'
+        : '/menu';
+
+  const heroLabel = !isAuthenticated
+    ? 'Get Started'
+    : isAdmin
+      ? 'Go to Dashboard'
+      : isStaff
+        ? 'Go to Staff Panel'
+        : 'Browse Menu';
 
   return (
     <div className="home-page">
@@ -31,13 +47,15 @@ export default function Home() {
               Fast, simple, and delicious.
             </p>
             <div className="hero-actions">
-              <Link to={isAuthenticated ? '/menu' : '/register'} className="btn btn-primary btn-lg">
-                {isAuthenticated ? 'Browse Menu' : 'Get Started'}
+              <Link to={heroTarget} className="btn btn-primary btn-lg">
+                {heroLabel}
                 <ArrowRight size={20} />
               </Link>
-              <Link to="/menu" className="btn btn-secondary btn-lg">
-                View Menu
-              </Link>
+              {!isAdmin && !isStaff && (
+                <Link to="/menu" className="btn btn-secondary btn-lg">
+                  View Menu
+                </Link>
+              )}
             </div>
             <div className="hero-stats">
               <div className="hero-stat">
@@ -101,8 +119,8 @@ export default function Home() {
           <div className="cta-card glass-card animate-fade-in-up">
             <h2>Ready to skip the queue?</h2>
             <p>Join hundreds of students already using OrderGo</p>
-            <Link to={isAuthenticated ? '/menu' : '/register'} className="btn btn-primary btn-lg">
-              {isAuthenticated ? 'Order Now' : 'Create Free Account'}
+            <Link to={heroTarget} className="btn btn-primary btn-lg">
+              {heroLabel}
               <ArrowRight size={20} />
             </Link>
           </div>

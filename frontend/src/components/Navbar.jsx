@@ -17,10 +17,14 @@ export default function Navbar() {
     setMenuOpen(false);
   }
 
+  // Determine destination based on user role
+  const logoHref = !isAuthenticated ? '/' : isAdmin ? '/admin' : isStaff ? '/staff' : '/';
+  const isCustomer = isAuthenticated && !isAdmin && !isStaff;
+
   return (
     <nav className="navbar">
       <div className="navbar-inner container">
-        <Link to="/" className="navbar-logo" onClick={() => setMenuOpen(false)}>
+        <Link to={logoHref} className="navbar-logo" onClick={() => setMenuOpen(false)}>
           <UtensilsCrossed size={28} />
           <span>Order<strong>Go</strong></span>
         </Link>
@@ -30,42 +34,56 @@ export default function Navbar() {
         </button>
 
         <div className={`navbar-links ${menuOpen ? 'open' : ''}`}>
-          <Link to="/menu" className="nav-link" onClick={() => setMenuOpen(false)}>Menu</Link>
-
-          {isAuthenticated ? (
+          {/* Guest Links */}
+          {!isAuthenticated && (
             <>
+              <Link to="/menu" className="nav-link" onClick={() => setMenuOpen(false)}>Menu</Link>
+              <div className="nav-auth">
+                <Link to="/login" className="nav-link" onClick={() => setMenuOpen(false)}>Login</Link>
+                <Link to="/register" className="btn btn-primary btn-sm" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+              </div>
+            </>
+          )}
+
+          {/* Customer / Student Links (Menu, My Orders, Cart) */}
+          {isCustomer && (
+            <>
+              <Link to="/menu" className="nav-link" onClick={() => setMenuOpen(false)}>Menu</Link>
               <Link to="/orders" className="nav-link" onClick={() => setMenuOpen(false)}>My Orders</Link>
-              {isStaff && (
-                <Link to="/staff" className="nav-link nav-link-admin" onClick={() => setMenuOpen(false)}>
-                  <ChefHat size={16} />
-                  Staff Panel
-                </Link>
-              )}
-              {isAdmin && (
-                <Link to="/admin" className="nav-link nav-link-admin" onClick={() => setMenuOpen(false)}>
-                  <LayoutDashboard size={16} />
-                  Dashboard
-                </Link>
-              )}
               <Link to="/cart" className="nav-link cart-link" onClick={() => setMenuOpen(false)}>
                 <ShoppingCart size={20} />
                 Cart
                 {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}
               </Link>
-              <div className="nav-user">
-                <Link to="/profile" className="nav-link user-link" onClick={() => setMenuOpen(false)}>
-                  <User size={18} />
-                  <span className="user-name">{user?.name?.split(' ')[0]}</span>
-                </Link>
-                <button className="nav-link logout-btn" onClick={handleLogout}>
-                  <LogOut size={18} />
-                </button>
-              </div>
             </>
-          ) : (
-            <div className="nav-auth">
-              <Link to="/login" className="nav-link" onClick={() => setMenuOpen(false)}>Login</Link>
-              <Link to="/register" className="btn btn-primary btn-sm" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+          )}
+
+          {/* Staff Panel Link (Exclusively for staff, no customer links) */}
+          {isAuthenticated && isStaff && !isAdmin && (
+            <Link to="/staff" className="nav-link nav-link-admin" onClick={() => setMenuOpen(false)}>
+              <ChefHat size={16} />
+              Staff Panel
+            </Link>
+          )}
+
+          {/* Admin Dashboard Link (Exclusively for admin, no customer links) */}
+          {isAuthenticated && isAdmin && (
+            <Link to="/admin" className="nav-link nav-link-admin" onClick={() => setMenuOpen(false)}>
+              <LayoutDashboard size={16} />
+              Dashboard
+            </Link>
+          )}
+
+          {/* User Profile & Logout (For all logged-in roles) */}
+          {isAuthenticated && (
+            <div className="nav-user">
+              <Link to="/profile" className="nav-link user-link" onClick={() => setMenuOpen(false)}>
+                <User size={18} />
+                <span className="user-name">{user?.name?.split(' ')[0]}</span>
+              </Link>
+              <button className="nav-link logout-btn" onClick={handleLogout} title="Logout" aria-label="Logout">
+                <LogOut size={18} />
+              </button>
             </div>
           )}
         </div>
