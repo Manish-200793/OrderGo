@@ -191,8 +191,16 @@
 }
 
 @media (max-width: 640px) {
+  .cart-item {
+    flex-wrap: wrap;
+  }
+  .cart-item-info {
+    width: 100%;
+  }
   .cart-item-controls {
     flex-wrap: wrap;
     gap: var(--space-sm);
+    width: 100%;
+    justify-content: space-between;
   }
 }

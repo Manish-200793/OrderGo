@@ -441,9 +441,18 @@ select.form-input {
 }
 
 @media (max-width: 640px) {
+  :root {
+    --space-xl: 1.5rem;
+    --space-2xl: 2rem;
+    --space-3xl: 2.5rem;
+    --font-size-3xl: 1.75rem;
+    --font-size-4xl: 2rem;
+    --font-size-5xl: 2.5rem;
+  }
   .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
   .page-title { font-size: var(--font-size-2xl); }
   .container { padding: 0 var(--space-md); }
+  .page { padding-top: calc(var(--navbar-height) + var(--space-lg)); }
 }
 
 /* --- Clean Instant Presentation (Animations Removed for Human Touch) --- */

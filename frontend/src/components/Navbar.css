@@ -149,6 +149,8 @@
     transform: translateY(-110%);
     transition: transform var(--transition-base);
     z-index: 999;
+    max-height: 100vh;
+    overflow-y: auto;
   }
 
   .navbar-links.open {
