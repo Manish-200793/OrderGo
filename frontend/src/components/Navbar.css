@@ -26,6 +26,7 @@
   color: var(--text-primary);
   font-weight: 300;
   letter-spacing: -0.02em;
+  flex-shrink: 0;
 }
 
 .navbar-logo strong {
@@ -147,14 +148,18 @@
     gap: var(--space-sm);
     border-bottom: 1px solid var(--border-subtle);
     transform: translateY(-110%);
-    transition: transform var(--transition-base);
+    transition: transform var(--transition-base), opacity var(--transition-base), visibility var(--transition-base);
     z-index: 999;
     max-height: 100vh;
     overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
   }
 
   .navbar-links.open {
     transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
   }
 
   .nav-user {

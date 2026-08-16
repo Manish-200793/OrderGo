@@ -274,7 +274,7 @@
   .hero-title { font-size: var(--font-size-3xl); }
   .hero-content { padding: var(--space-xl) var(--space-md); }
   .features-grid { grid-template-columns: 1fr; }
-  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions { flex-wrap: wrap; justify-content: center; }
   .hero-stats { gap: var(--space-md); flex-wrap: wrap; justify-content: center; }
   .cta-card { padding: var(--space-xl); }
 }
