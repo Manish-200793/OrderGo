@@ -30,7 +30,7 @@
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md);
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .cart-item-image {
@@ -94,7 +94,7 @@
   padding: var(--space-xl);
   position: sticky;
   top: calc(var(--navbar-height) + var(--space-lg));
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .summary-title {
@@ -152,7 +152,7 @@
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md);
-  background: #FFFFFF;
+  background: var(--bg-card);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-md);
   cursor: pointer;

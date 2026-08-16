@@ -23,7 +23,7 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  background: #FFFFFF;
+  background: var(--bg-card);
   border-radius: var(--radius-full);
   box-shadow: var(--shadow-sm);
   flex-shrink: 0;
@@ -68,7 +68,7 @@
   gap: var(--space-md);
   padding: var(--space-md) var(--space-lg);
   margin-bottom: var(--space-lg);
-  background: #FFFFFF;
+  background: var(--bg-card);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-lg);
 }
@@ -116,7 +116,7 @@
   align-items: center;
   gap: var(--space-xs);
   padding: 0.6rem 1.2rem;
-  background: #FFFFFF;
+  background: var(--bg-card);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-full);
   color: var(--text-secondary);

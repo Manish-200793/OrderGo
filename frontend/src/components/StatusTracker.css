@@ -33,14 +33,14 @@
 }
 
 .status-step.active .status-dot {
-  background: #FFFFFF;
+  background: var(--bg-card);
   border-color: var(--accent-primary);
   box-shadow: 0 0 10px var(--accent-glow);
 }
 
 .status-step.current .status-dot {
   border-color: var(--accent-primary);
-  background: #FFFDFB;
+  background: var(--bg-secondary);
 }
 
 .status-icon {

@@ -8,7 +8,7 @@
 .profile-card {
   padding: var(--space-2xl);
   text-align: center;
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .profile-avatar {
@@ -37,7 +37,7 @@
 
 .profile-form-card {
   padding: var(--space-xl);
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 @media (max-width: 768px) {

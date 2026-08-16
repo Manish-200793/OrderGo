@@ -65,7 +65,7 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .staff-stat-card::before {
@@ -129,7 +129,7 @@
   align-items: center;
   gap: var(--space-xs);
   padding: 0.55rem 1.1rem;
-  background: #FFFFFF;
+  background: var(--bg-card);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-full);
   color: var(--text-secondary);
@@ -187,7 +187,7 @@
   padding: 0;
   overflow: hidden;
   position: relative;
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .staff-order-card::after {

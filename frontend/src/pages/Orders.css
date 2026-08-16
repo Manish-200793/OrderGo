@@ -42,7 +42,7 @@
   padding: var(--space-lg);
   color: var(--text-primary);
   text-decoration: none;
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .order-card-header {

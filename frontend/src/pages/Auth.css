@@ -12,7 +12,7 @@
 
 .auth-card {
   padding: var(--space-2xl);
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .auth-header {

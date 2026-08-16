@@ -15,7 +15,7 @@
   position: sticky;
   top: calc(var(--navbar-height) + var(--space-lg));
   height: fit-content;
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .admin-sidebar-header h2 {
@@ -73,7 +73,7 @@
 .stat-card {
   padding: var(--space-lg);
   text-align: center;
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .stat-card:hover {

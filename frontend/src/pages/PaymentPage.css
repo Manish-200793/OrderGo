@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  background: #FFFFFF;
+  background: var(--bg-card);
 }
 
 .payment-header h2 {
@@ -60,7 +60,7 @@
 
 .qr-wrapper {
   padding: 1.5rem;
-  background: #FFFFFF;
+  background: var(--bg-card);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-subtle);
