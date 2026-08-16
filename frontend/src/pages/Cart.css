@@ -9,7 +9,7 @@
 }
 
 .back-link:hover {
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 .cart-layout {
@@ -30,10 +30,7 @@
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md);
-}
-
-.cart-item:hover {
-  transform: none;
+  background: #FFFFFF;
 }
 
 .cart-item-image {
@@ -56,6 +53,7 @@
 .cart-item-info h3 {
   font-size: var(--font-size-md);
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 .cart-item-price {
@@ -71,7 +69,7 @@
 
 .cart-item-total {
   font-weight: 700;
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
   min-width: 60px;
   text-align: right;
 }
@@ -96,6 +94,7 @@
   padding: var(--space-xl);
   position: sticky;
   top: calc(var(--navbar-height) + var(--space-lg));
+  background: #FFFFFF;
 }
 
 .summary-title {
@@ -124,7 +123,7 @@
 }
 
 .summary-total span:last-child {
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
 }
 
 .summary-divider {
@@ -153,7 +152,7 @@
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md);
-  background: white;
+  background: #FFFFFF;
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -168,7 +167,7 @@
 
 .payment-option.active {
   border-color: var(--accent-primary);
-  background: rgba(16, 185, 129, 0.04);
+  background: var(--accent-tint);
   box-shadow: 0 0 0 2px var(--accent-glow);
 }
 

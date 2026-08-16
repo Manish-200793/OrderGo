@@ -4,7 +4,7 @@
   margin: 0 auto;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: white;
+  background: #FFFFFF;
   border: 1px solid var(--border-subtle);
 }
 
@@ -23,17 +23,19 @@
 
 #qr-reader__dashboard_section_csr button {
   background: var(--accent-primary);
-  color: white;
+  color: #FFFFFF !important;
   border: none;
   padding: 8px 16px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-family: inherit;
-  font-weight: 500;
+  font-weight: 600;
+  transition: background-color var(--transition-fast);
 }
 
 #qr-reader__dashboard_section_csr button:hover {
-  background: #059669;
+  background: var(--accent-primary-hover);
+  color: #FFFFFF !important;
 }
 
 #qr-reader__dashboard_section_swaplink {
@@ -41,4 +43,8 @@
   text-decoration: none;
   margin-top: 10px;
   display: inline-block;
+}
+
+#qr-reader__dashboard_section_swaplink:hover {
+  color: var(--accent-primary-hover);
 }

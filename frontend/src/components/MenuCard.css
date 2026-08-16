@@ -31,7 +31,7 @@
   justify-content: center;
   height: 100%;
   font-size: 3rem;
-  background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+  background: linear-gradient(135deg, #F4F4F5 0%, #E4E4E7 100%);
 }
 
 .menu-card-sold-out {
@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   color: var(--status-cancelled);
   font-weight: 700;
   font-size: var(--font-size-lg);
@@ -76,7 +76,7 @@
 .menu-card-price {
   font-size: var(--font-size-lg);
   font-weight: 800;
-  color: var(--accent-primary);
+  color: var(--accent-primary-hover);
   white-space: nowrap;
 }
 
@@ -140,14 +140,13 @@
   border: none;
   border-radius: var(--radius-full);
   background: var(--accent-primary);
-  color: white;
+  color: #FFFFFF !important;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: background-color var(--transition-fast);
 }
 
 .qty-btn:hover {
-  transform: scale(1.1);
-  background: #059669;
+  background: var(--accent-primary-hover);
 }
 
 .qty-value {
@@ -155,6 +154,7 @@
   font-weight: 700;
   min-width: 24px;
   text-align: center;
+  color: var(--text-primary);
 }
 
 .menu-card-login-btn {
@@ -162,4 +162,3 @@
   font-weight: 600;
   gap: var(--space-xs);
 }
-

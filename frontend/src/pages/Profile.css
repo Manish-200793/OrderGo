@@ -8,6 +8,7 @@
 .profile-card {
   padding: var(--space-2xl);
   text-align: center;
+  background: #FFFFFF;
 }
 
 .profile-avatar {
@@ -19,7 +20,7 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto var(--space-md);
-  color: white;
+  color: #FFFFFF;
 }
 
 .profile-card h2 {
@@ -36,6 +37,7 @@
 
 .profile-form-card {
   padding: var(--space-xl);
+  background: #FFFFFF;
 }
 
 @media (max-width: 768px) {
