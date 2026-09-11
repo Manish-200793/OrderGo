@@ -390,11 +390,19 @@
   color: #2563EB !important;
   border-color: rgba(59, 130, 246, 0.25);
 }
+[data-theme="dark"] .staff-action-btn.action-preparing {
+  color: #60A5FA !important;
+  background: rgba(96, 165, 250, 0.15);
+}
 
 .staff-action-btn.action-preparing:hover:not(:disabled) {
   background: #2563EB;
   color: #FFFFFF !important;
   border-color: #2563EB;
+}
+[data-theme="dark"] .staff-action-btn.action-preparing:hover:not(:disabled) {
+  background: #3B82F6;
+  border-color: #3B82F6;
 }
 
 .staff-action-btn.action-ready {
@@ -402,11 +410,19 @@
   color: #EA580C !important;
   border-color: rgba(249, 115, 22, 0.25);
 }
+[data-theme="dark"] .staff-action-btn.action-ready {
+  color: #FB923C !important;
+  background: rgba(251, 146, 60, 0.15);
+}
 
 .staff-action-btn.action-ready:hover:not(:disabled) {
   background: #EA580C;
   color: #FFFFFF !important;
   border-color: #EA580C;
+}
+[data-theme="dark"] .staff-action-btn.action-ready:hover:not(:disabled) {
+  background: #F97316;
+  border-color: #F97316;
 }
 
 .staff-action-btn.action-complete {
@@ -426,11 +442,19 @@
   color: #DC2626 !important;
   border-color: rgba(239, 68, 68, 0.2);
 }
+[data-theme="dark"] .staff-action-btn.action-cancel {
+  color: #F87171 !important;
+  background: rgba(248, 113, 113, 0.15);
+}
 
 .staff-action-btn.action-cancel:hover:not(:disabled) {
   background: #DC2626;
   border-color: #DC2626;
   color: #FFFFFF !important;
+}
+[data-theme="dark"] .staff-action-btn.action-cancel:hover:not(:disabled) {
+  background: #EF4444;
+  border-color: #EF4444;
 }
 
 /* --- Empty State --- */
