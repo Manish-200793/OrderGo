@@ -100,30 +100,37 @@
   --bg-secondary: #121220;
   --bg-tertiary: #1C1C2C;
   --bg-card: #141424;
-  --bg-glass: rgba(20, 20, 36, 0.7);
-  --bg-glass-hover: rgba(28, 28, 44, 0.85);
+  --bg-glass: rgba(20, 20, 36, 0.85);
+  --bg-glass-hover: rgba(28, 28, 44, 0.9);
   --bg-glass-active: rgba(35, 35, 55, 0.95);
+
+  /* Orange Accents — Darkened tints for dark backgrounds */
+  --accent-tint: rgba(249, 115, 22, 0.1);
+  --accent-subtle: rgba(249, 115, 22, 0.15);
+  --accent-glow: rgba(249, 115, 22, 0.25);
 
   /* Text Hierarchy */
   --text-primary: #F8FAFC;
   --text-secondary: #94A3B8;
   --text-muted: #64748B;
-  
+  --text-accent: #FB923C;
+
   /* Borders */
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-medium: rgba(255, 255, 255, 0.15);
+  --border-accent: rgba(249, 115, 22, 0.3);
 
   /* Shadows (Darkened for depth) */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 18px rgba(249, 115, 22, 0.25);
 }
 
-/* Adjust subtle background pattern for dark mode */
+/* Remove background pattern entirely in dark mode to prevent bright glow near navbar */
 [data-theme="dark"] body::before {
-  background-image: radial-gradient(circle at 15% 50%, rgba(249, 115, 22, 0.06), transparent 35%),
-                    radial-gradient(circle at 85% 30%, rgba(249, 115, 22, 0.04), transparent 45%);
+  background: none;
 }
 
 /* --- Reset --- */
@@ -257,7 +264,7 @@ input, select, textarea, button {
 }
 
 .btn-secondary {
-  background: #FFFFFF;
+  background: var(--bg-card);
   color: var(--text-primary) !important;
   border-color: var(--border-medium);
 }
@@ -277,6 +284,9 @@ input, select, textarea, button {
   background: transparent;
   color: var(--accent-primary-hover) !important;
   border-color: var(--accent-primary);
+}
+[data-theme="dark"] .btn-outline {
+  color: var(--text-accent) !important;
 }
 
 .btn-outline:hover {
@@ -345,7 +355,7 @@ input, select, textarea, button {
 .form-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  background: #FFFFFF;
+  background: var(--bg-card);
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-md);
   color: var(--text-primary);
@@ -570,7 +580,7 @@ select.form-input {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;

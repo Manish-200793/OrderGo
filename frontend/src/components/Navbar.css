@@ -131,7 +131,18 @@
   margin-left: var(--space-sm);
 }
 
+/* Dark mode: solid navbar background to prevent bright bleed-through */
+[data-theme="dark"] .navbar {
+  background: rgba(10, 10, 20, 0.97);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .navbar-links {
+  background: rgba(10, 10, 20, 0.97);
+}
+
 @media (max-width: 768px) {
+
   .navbar-toggle {
     display: block;
   }

@@ -83,6 +83,9 @@
   border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
 }
+[data-theme="dark"] .cart-item-remove {
+  color: var(--text-secondary);
+}
 
 .cart-item-remove:hover {
   color: var(--status-cancelled);

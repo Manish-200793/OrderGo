@@ -9,7 +9,7 @@
   align-items: center;
   position: relative;
   padding-top: var(--navbar-height);
-  background: linear-gradient(180deg, #FFF7ED 0%, var(--bg-primary) 65%);
+  background: linear-gradient(180deg, var(--accent-tint) 0%, var(--bg-primary) 65%);
 }
 
 .hero-content {
@@ -230,8 +230,8 @@
 
 .cta-card {
   padding: var(--space-3xl);
-  background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
-  border: 1px solid rgba(249, 115, 22, 0.2);
+  background: linear-gradient(135deg, var(--accent-tint) 0%, var(--accent-subtle) 100%);
+  border: 1px solid var(--border-accent);
 }
 
 .cta-card h2 {
