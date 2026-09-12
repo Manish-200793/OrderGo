@@ -5,14 +5,14 @@ const { getDb } = require('../config/database');
  */
 async function createOrder(req, res) {
   const db = getDb();
-  const { items, payment_method, pickup_type } = req.body;
+  const { items, payment_method, pickup_type, guest_name } = req.body;
   const userId = req.user.userId;
 
   if (!items || !items.length) {
     return res.status(400).json({ error: 'Order must contain at least one item.' });
   }
 
-  if (!payment_method || !['upi'].includes(payment_method)) {
+  if (!payment_method || !['upi', 'cash'].includes(payment_method)) {
     return res.status(400).json({ error: 'Invalid payment method.' });
   }
 
@@ -54,12 +54,13 @@ async function createOrder(req, res) {
 
     const orderId = 'ORD-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 5).toUpperCase();
     const qrCode = `ORDERGO:${orderId}:${userId}:${totalPrice}`;
-    const paymentStatus = 'pending';
+    const paymentStatus = payment_method === 'cash' ? 'success' : 'pending';
+    const orderStatus = payment_method === 'cash' ? 'preparing' : 'pending';
 
     await connection.query(`
-      INSERT INTO orders (order_id, user_id, total_price, status, payment_method, payment_status, qr_code, pickup_type)
-      VALUES (?, ?, ?, 'pending', ?, ?, ?, 'pickup')
-    `, [orderId, userId, totalPrice, payment_method, paymentStatus, qrCode]);
+      INSERT INTO orders (order_id, user_id, guest_name, total_price, status, payment_method, payment_status, qr_code, pickup_type)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pickup')
+    `, [orderId, userId, guest_name || null, totalPrice, orderStatus, payment_method, paymentStatus, qrCode]);
 
     for (const oi of orderItems) {
       await connection.query('INSERT INTO order_items (order_id, item_id, quantity, price_at_order) VALUES (?, ?, ?, ?)', [orderId, oi.item_id, oi.quantity, oi.price_at_order]);

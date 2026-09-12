@@ -16,6 +16,7 @@ import MenuManager from './pages/admin/MenuManager';
 import OrderManager from './pages/admin/OrderManager';
 import Analytics from './pages/admin/Analytics';
 import StaffDashboard from './pages/staff/StaffDashboard';
+import OrderQueue from './pages/staff/OrderQueue';
 import ProtectedRoute from './components/ProtectedRoute';
 
 export const router = createBrowserRouter([
@@ -63,5 +64,9 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute staffOnly><StaffDashboard /></ProtectedRoute>,
       },
     ],
+  },
+  {
+    path: '/queue',
+    element: <ProtectedRoute staffOnly><OrderQueue /></ProtectedRoute>,
   },
 ]);

@@ -86,6 +86,7 @@ async function initDatabase() {
       CREATE TABLE IF NOT EXISTS orders (
         order_id VARCHAR(50) PRIMARY KEY,
         user_id INT NOT NULL,
+        guest_name VARCHAR(255) DEFAULT NULL,
         total_price DECIMAL(10, 2) NOT NULL,
         status ENUM('pending', 'preparing', 'ready', 'completed', 'cancelled') DEFAULT 'pending',
         payment_method ENUM('cash', 'upi', 'card'),
