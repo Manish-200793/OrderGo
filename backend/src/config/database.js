@@ -72,7 +72,7 @@ async function initDatabase() {
         item_id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         description TEXT,
-        category ENUM('breakfast', 'lunch', 'snacks', 'beverages') NOT NULL,
+        category ENUM('breakfast', 'lunch', 'snacks', 'beverages', 'desserts') NOT NULL,
         price DECIMAL(10, 2) NOT NULL,
         stock INT DEFAULT 50,
         image_url VARCHAR(255),

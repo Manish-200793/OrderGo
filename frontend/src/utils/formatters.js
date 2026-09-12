@@ -56,6 +56,7 @@ export const CATEGORY_CONFIG = {
   lunch: { label: 'Lunch', emoji: '🍽️' },
   snacks: { label: 'Snacks', emoji: '🍿' },
   beverages: { label: 'Beverages', emoji: '☕' },
+  desserts: { label: 'Desserts', emoji: '🍰' },
 };
 
 /**

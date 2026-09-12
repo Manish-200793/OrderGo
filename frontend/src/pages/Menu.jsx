@@ -70,34 +70,98 @@ export default function MenuPage() {
     setRouletteCombo(null);
     
     setTimeout(() => {
-      let bestCombo = [];
-      let bestTotal = 0;
+      let validCombos = [];
       
-      // Generate 50 random combinations to find the one closest to the budget (max profit)
+      const availableItems = items.filter(i => i.is_available === 1 || i.is_available === true);
+      const mains = availableItems.filter(i => ['breakfast', 'lunch', 'snacks'].includes(i.category));
+      const bevs = availableItems.filter(i => i.category === 'beverages');
+      const sweets = availableItems.filter(i => i.category === 'desserts');
+
+      // Generate 50 structured combinations
       for (let i = 0; i < 50; i++) {
         let currentCombo = [];
         let currentTotal = 0;
-        let shuffled = [...items].sort(() => 0.5 - Math.random());
-        
-        for (let item of shuffled) {
-          if (currentCombo.length >= 3) break;
-          const price = parseFloat(item.price);
-          if (currentTotal + price <= b) {
-            currentCombo.push(item);
-            currentTotal += price;
+
+        // Shuffle buckets
+        const shuffledMains = [...mains].sort(() => 0.5 - Math.random());
+        const shuffledBevs = [...bevs].sort(() => 0.5 - Math.random());
+        const shuffledSweets = [...sweets].sort(() => 0.5 - Math.random());
+
+        // Try to add 1 Main
+        if (shuffledMains.length > 0) {
+          const main = shuffledMains[0];
+          let mainCost = parseFloat(main.price);
+          let mainItems = [main];
+          
+          // Force pairing for Paneer Butter Masala
+          if (main.name === 'Paneer Butter Masala') {
+             const roti = availableItems.find(item => item.name === 'Rumali Roti');
+             if (roti) {
+               mainItems.push(roti);
+               mainCost += parseFloat(roti.price);
+             }
+          }
+
+          if (currentTotal + mainCost <= b) {
+            currentCombo.push(...mainItems);
+            currentTotal += mainCost;
           }
         }
-        
-        if (currentTotal > bestTotal) {
-          bestTotal = currentTotal;
-          bestCombo = currentCombo;
+
+        // Try to add 1 Beverage
+        if (shuffledBevs.length > 0) {
+          const bev = shuffledBevs[0];
+          if (currentTotal + parseFloat(bev.price) <= b) {
+            currentCombo.push(bev);
+            currentTotal += parseFloat(bev.price);
+          }
+        }
+
+        // Try to add 1 Dessert
+        if (shuffledSweets.length > 0) {
+          const sweet = shuffledSweets[0];
+          if (currentTotal + parseFloat(sweet.price) <= b) {
+            currentCombo.push(sweet);
+            currentTotal += parseFloat(sweet.price);
+          }
+        }
+
+        // Fallback: If budget is too low for the structured combo, just find ANY item that fits
+        if (currentCombo.length === 0) {
+           const anyShuffled = [...availableItems].sort(() => 0.5 - Math.random());
+           for (let item of anyShuffled) {
+             if (parseFloat(item.price) <= b) {
+               currentCombo.push(item);
+               currentTotal += parseFloat(item.price);
+               break;
+             }
+           }
         }
         
-        // If we hit a perfect match, no need to keep searching
-        if (bestTotal === b) break;
+        // Keep valid combos
+        if (currentCombo.length > 0) {
+           validCombos.push(currentCombo); 
+        }
       }
       
-      setRouletteCombo(bestCombo);
+      // Select a random combination from the top tier of valid combos to ensure variety
+      if (validCombos.length > 0) {
+         // Sort combos by how much budget they utilize
+         validCombos.sort((c1, c2) => {
+             const t1 = c1.reduce((sum, i) => sum + parseFloat(i.price), 0);
+             const t2 = c2.reduce((sum, i) => sum + parseFloat(i.price), 0);
+             return t2 - t1;
+         });
+         
+         // Take the top 10 best combos and pick one randomly
+         // This prevents Biryani from dominating 100% of the time just because it maxes out the budget
+         const topCombos = validCombos.slice(0, 10);
+         const randomBest = topCombos[Math.floor(Math.random() * topCombos.length)];
+         setRouletteCombo(randomBest);
+      } else {
+         setRouletteCombo([]);
+      }
+      
       setIsSpinning(false);
     }, 1200);
   }
