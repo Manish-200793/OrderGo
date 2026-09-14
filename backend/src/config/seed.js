@@ -75,6 +75,10 @@ async function seed() {
       ['Paneer Butter Masala', 'Creamy tomato-based curry with cottage cheese, served with naan', 'lunch', 130, 30, '/images/paneer.jpg', 1, 0],
       ['Rajma Chawal', 'Kidney bean curry served with steamed rice', 'lunch', 90, 35, '/images/rajma.jpg', 1, 0],
       ['Chole Bhature', 'Spicy chickpea curry with deep-fried bread', 'lunch', 100, 30, '/images/chole.jpg', 1, 0],
+      ['Rumali Roti', 'Thin and soft Indian flatbread', 'lunch', 15, 100, '/images/rumali-roti.jpg', 1, 0],
+      ['Butter Naan', 'Soft traditional Indian flatbread baked in tandoor with butter', 'lunch', 35, 80, '/images/butter-naan.jpg', 1, 0],
+      ['Egg Fried Rice', 'Wok-tossed rice with egg, vegetables, and soy sauce', 'lunch', 90, 40, '/images/egg-fried-rice.jpg', 1, 0],
+      ['Veg Fried Rice', 'Classic Indo-Chinese fried rice with fresh veggies', 'lunch', 80, 50, '/images/veg-fried-rice.jpg', 1, 0],
 
       // Snacks
       ['Samosa', 'Crispy pastry filled with spiced potatoes and peas', 'snacks', 20, 60, '/images/samosa.jpg', 1, 0],
@@ -82,13 +86,25 @@ async function seed() {
       ['Pav Bhaji', 'Mashed vegetable curry served with buttered bread rolls', 'snacks', 70, 35, '/images/pav-bhaji.jpg', 1, 0],
       ['Maggi Noodles', 'Quick-cooked instant noodles with vegetables', 'snacks', 40, 45, '/images/maggi.jpg', 1, 0],
       ['French Fries', 'Crispy golden potato fries with ketchup', 'snacks', 50, 40, '/images/fries.jpg', 1, 0],
+      ['Chicken Manchuria', 'Spicy, sweet, and tangy Indo-Chinese chicken appetizer', 'snacks', 120, 30, '/images/chicken-manchuria.jpg', 1, 0],
+      ['Veg Manchuria', 'Deep-fried vegetable balls in a spicy Indo-Chinese sauce', 'snacks', 90, 40, '/images/veg-manchuria.jpg', 1, 0],
 
       // Beverages
       ['Masala Chai', 'Hot spiced Indian tea with milk', 'beverages', 15, 80, '/images/chai.jpg', 1, 0],
+      ['Regular Tea', 'Classic hot Indian tea', 'beverages', 12, 100, '/images/tea.jpg', 1, 0],
       ['Cold Coffee', 'Chilled coffee blended with milk and ice cream', 'beverages', 60, 40, '/images/cold-coffee.jpg', 1, 1],
       ['Fresh Lime Soda', 'Refreshing lemon soda, sweet or salty', 'beverages', 35, 50, '/images/lime-soda.jpg', 1, 0],
       ['Mango Lassi', 'Thick mango yogurt drink', 'beverages', 50, 35, '/images/lassi.jpg', 1, 0],
       ['Buttermilk', 'Spiced yogurt drink with cumin and coriander', 'beverages', 20, 45, '/images/buttermilk.jpg', 1, 0],
+      ['Assorted Cooldrinks', 'Chilled carbonated soft drinks (Coke, Sprite, Thums Up)', 'beverages', 40, 60, '/images/cooldrinks.jpg', 1, 0],
+
+      // Desserts
+      ['Gulab Jamun', 'Soft milk dumplings soaked in rose-flavored sugar syrup', 'desserts', 30, 40, '/images/gulab-jamun.jpg', 1, 1],
+      ['Vanilla Ice Cream', 'Classic creamy vanilla scoop', 'desserts', 40, 50, '/images/ice-cream.jpg', 1, 0],
+      ['Chocolate Ice Cream', 'Rich chocolate ice cream scoop', 'desserts', 45, 45, '/images/choc-icecream.jpg', 1, 0],
+      ['Chocolate Brownie', 'Fudgy chocolate brownie with walnuts', 'desserts', 50, 30, '/images/brownie.jpg', 1, 0],
+      ['Choco Chip Cookies', 'Freshly baked cookies with chocolate chips (2 pcs)', 'desserts', 25, 40, '/images/cookies.jpg', 1, 0],
+      ['Black Forest Pastry', 'Classic chocolate sponge cake layered with cherry and cream', 'desserts', 60, 20, '/images/pastry.jpg', 1, 0],
     ];
 
     for (const item of menuItems) {
@@ -98,7 +114,7 @@ async function seed() {
       `, item);
     }
 
-    console.log('✅ Menu items seeded (20 items)');
+    console.log(`✅ Menu items seeded (${menuItems.length} items)`);
 
     // --- Seed Sample Orders ---
     const order1Id = 'ORD-' + Date.now().toString(36).toUpperCase() + '001';

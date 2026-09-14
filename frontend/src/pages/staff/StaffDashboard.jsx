@@ -2,10 +2,11 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Clock, ChefHat, CheckCircle2, XCircle, Package,
   User, Hash, Phone, RefreshCw, CookingPot,
-  HandPlatter, CircleCheck, Ban, Flame, Timer, ScanLine, X
+  HandPlatter, CircleCheck, Ban, Flame, Timer, ScanLine, X, Monitor
 } from 'lucide-react';
-import { staffAPI, orderAPI } from '../../services/api';
+import { staffAPI, orderAPI, menuAPI } from '../../services/api';
 import QRScanner from '../../components/QRScanner';
+import { QRCodeSVG } from 'qrcode.react';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import './Staff.css';
 
@@ -25,6 +26,65 @@ export default function StaffDashboard() {
   const [scanError, setScanError] = useState('');
   const [verifying, setVerifying] = useState(false);
   const isProcessingScan = useRef(false);
+
+  // POS State
+  const [showPOS, setShowPOS] = useState(false);
+  const [menuItems, setMenuItems] = useState([]);
+  const [posCart, setPosCart] = useState([]);
+  const [guestName, setGuestName] = useState('');
+  const [posSubmitting, setPosSubmitting] = useState(false);
+  const [posSuccessOrder, setPosSuccessOrder] = useState(null);
+
+  const handleOpenPOS = async () => {
+    setShowPOS(true);
+    if (menuItems.length === 0) {
+      try {
+        const res = await menuAPI.getItems();
+        setMenuItems(res.data.filter(i => i.is_available));
+      } catch (err) {
+        console.error('Failed to load menu for POS:', err);
+      }
+    }
+  };
+
+  const updatePosCart = (item, delta) => {
+    setPosCart(prev => {
+      const existing = prev.find(i => i.item_id === item.item_id);
+      if (existing) {
+        const newQty = existing.quantity + delta;
+        if (newQty <= 0) return prev.filter(i => i.item_id !== item.item_id);
+        return prev.map(i => i.item_id === item.item_id ? { ...i, quantity: newQty } : i);
+      } else if (delta > 0) {
+        return [...prev, { ...item, quantity: 1 }];
+      }
+      return prev;
+    });
+  };
+
+  const posTotal = posCart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+
+  const handlePOSSubmit = async () => {
+    if (posCart.length === 0) return;
+    setPosSubmitting(true);
+    try {
+      const payload = {
+        items: posCart.map(i => ({ item_id: i.item_id, quantity: i.quantity })),
+        payment_method: 'cash',
+        pickup_type: 'pickup',
+        guest_name: guestName.trim() || 'Offline Student'
+      };
+      const res = await orderAPI.create(payload);
+      setPosSuccessOrder(res.data.order);
+      setShowPOS(false);
+      setPosCart([]);
+      setGuestName('');
+      fetchData(true);
+    } catch (err) {
+      alert(err.response?.data?.error || 'Failed to create POS order');
+    } finally {
+      setPosSubmitting(false);
+    }
+  };
 
   const fetchData = useCallback(async (isRefresh = false) => {
     try {
@@ -171,26 +231,47 @@ export default function StaffDashboard() {
 
   return (
     <div className="staff-dashboard">
-      {/* Header */}
       <div className="staff-header animate-fade-in">
         <div className="staff-header-left">
           <h1>Staff Dashboard</h1>
           <p>Manage incoming orders and track preparation status</p>
         </div>
-        <div className="staff-header-actions">
-          <button className="btn btn-primary" onClick={() => { 
-            isProcessingScan.current = false; 
-            setShowScanner(true); 
-            setScannedOrder(null); 
-            setScanError(''); 
-          }}>
-            <ScanLine size={18} /> Scan Pickup QR
-          </button>
-          <div className={`staff-refresh-indicator ${refreshing ? 'refreshing' : ''}`}>
-            <RefreshCw size={14} />
-            {refreshing ? 'Refreshing...' : 'Auto-refresh 15s'}
-          </div>
+        <div className={`staff-refresh-indicator ${refreshing ? 'refreshing' : ''}`}>
+          <RefreshCw size={14} className={refreshing ? 'spin' : ''} />
+          {refreshing ? 'Syncing...' : 'Auto-sync ON'}
         </div>
+      </div>
+
+      {/* Quick Actions Grid */}
+      <div className="staff-quick-actions animate-fade-in">
+        <button className="staff-quick-btn" onClick={() => window.open('/queue', '_blank')}>
+          <div className="sq-icon monitor"><Monitor size={24} /></div>
+          <div className="sq-text">
+            <span>TV Display</span>
+            <small>Launch customer queue screen</small>
+          </div>
+        </button>
+        
+        <button className="staff-quick-btn" onClick={handleOpenPOS}>
+          <div className="sq-icon pos"><CookingPot size={24} /></div>
+          <div className="sq-text">
+            <span>POS System</span>
+            <small>Create offline cash orders</small>
+          </div>
+        </button>
+
+        <button className="staff-quick-btn" onClick={() => { 
+          isProcessingScan.current = false; 
+          setShowScanner(true); 
+          setScannedOrder(null); 
+          setScanError(''); 
+        }}>
+          <div className="sq-icon scan"><ScanLine size={24} /></div>
+          <div className="sq-text">
+            <span>Scan Pickup</span>
+            <small>Verify student QR codes</small>
+          </div>
+        </button>
       </div>
 
       {/* Stats Grid */}
@@ -394,6 +475,98 @@ export default function StaffDashboard() {
               >
                 {verifying ? 'Verifying...' : 'Confirm Handover'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* POS Modal */}
+      {showPOS && (
+        <div className="modal-overlay animate-fade-in no-print">
+          <div className="modal-content glass-card pos-modal" style={{ maxWidth: '800px' }}>
+            <div className="modal-header">
+              <h2>New POS Order (Cash)</h2>
+              <button className="btn-close" onClick={() => setShowPOS(false)}><X size={20} /></button>
+            </div>
+            <div className="modal-body pos-body">
+              <div className="pos-layout">
+                <div className="pos-menu">
+                  <h3 style={{ marginBottom: '1rem' }}>Menu Items</h3>
+                  <div className="pos-menu-list">
+                    {menuItems.map(item => (
+                      <div key={item.item_id} className="pos-menu-item">
+                        <div>
+                          <strong>{item.name}</strong>
+                          <div style={{ color: 'var(--text-muted)' }}>₹{parseFloat(item.price).toFixed(0)}</div>
+                        </div>
+                        <button className="btn btn-sm btn-outline" onClick={() => updatePosCart(item, 1)}>Add</button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="pos-cart-panel">
+                  <h3 style={{ marginBottom: '1rem' }}>Order Summary</h3>
+                  <div className="pos-cart-list">
+                    {posCart.length === 0 ? <p className="text-muted">Cart is empty</p> : posCart.map(item => (
+                      <div key={item.item_id} className="pos-cart-item">
+                        <span>{item.name}</span>
+                        <div className="quantity-control">
+                          <button className="qty-btn" onClick={() => updatePosCart(item, -1)}>-</button>
+                          <span className="qty-value">{item.quantity}</span>
+                          <button className="qty-btn" onClick={() => updatePosCart(item, 1)}>+</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="pos-total" style={{ fontWeight: 'bold', fontSize: '1.2rem', marginTop: '1rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem' }}>Total: ₹{posTotal.toFixed(0)}</div>
+                  <div className="form-group mt-md">
+                    <label className="form-label">Student Name (Optional)</label>
+                    <input type="text" className="form-input" placeholder="e.g. John Doe" value={guestName} onChange={e => setGuestName(e.target.value)} />
+                  </div>
+                  <button className="btn btn-primary w-full mt-sm" disabled={posCart.length === 0 || posSubmitting} onClick={handlePOSSubmit}>
+                    {posSubmitting ? 'Creating...' : `Collect Cash & Order`}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Print Slip Modal */}
+      {posSuccessOrder && (
+        <div className="modal-overlay animate-fade-in print-overlay">
+          <div className="modal-content glass-card print-modal" id="print-section" style={{ maxWidth: '400px' }}>
+            <div className="modal-header no-print">
+              <h2>Order Slip</h2>
+              <button className="btn-close" onClick={() => setPosSuccessOrder(null)}><X size={20} /></button>
+            </div>
+            <div className="slip-content text-center" style={{ color: '#000', background: '#fff', padding: '20px', borderRadius: '8px' }}>
+              <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0, color: '#000' }}>OrderGo</h1>
+              <p style={{ margin: 0, color: '#000' }}>College Canteen</p>
+              <div style={{ margin: '15px 0', borderTop: '1px dashed #000', borderBottom: '1px dashed #000', padding: '10px 0', textAlign: 'left', color: '#000' }}>
+                <p style={{ margin: '4px 0' }}><strong>Order ID:</strong> {posSuccessOrder.order_id}</p>
+                <p style={{ margin: '4px 0' }}><strong>Name:</strong> {posSuccessOrder.guest_name}</p>
+              </div>
+              <div style={{ textAlign: 'left', marginBottom: '15px', color: '#000' }}>
+                {posSuccessOrder.items?.map(item => (
+                  <div key={item.item_id} style={{ display: 'flex', justifyContent: 'space-between', margin: '4px 0' }}>
+                    <span>{item.quantity}x {item.name}</span>
+                    <span>₹{item.price_at_order * item.quantity}</span>
+                  </div>
+                ))}
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #000' }}>
+                  <span>Total (PAID CASH)</span>
+                  <span>₹{posSuccessOrder.total_price}</span>
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+                <QRCodeSVG value={posSuccessOrder.qr_code} size={150} level="L" includeMargin={true} />
+              </div>
+              <p style={{ fontSize: '12px', color: '#000' }}>Show this QR at the counter</p>
+            </div>
+            <div className="no-print mt-md">
+              <button className="btn btn-primary w-full" onClick={() => window.print()}>Print Slip</button>
             </div>
           </div>
         </div>

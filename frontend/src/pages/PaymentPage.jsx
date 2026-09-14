@@ -74,7 +74,7 @@ export default function PaymentPage() {
 
           <div className="payment-qr-section">
             <div className="qr-wrapper">
-              <QRCodeSVG value={upiUrl} size={200} bgColor="#ffffff" fgColor="#1e1e2d" level="H" />
+              <QRCodeSVG value={upiUrl} size={240} bgColor="#ffffff" fgColor="#000000" level="L" includeMargin={true} />
             </div>
             <div className="upi-details">
               <p>UPI ID: <strong>manishsagar9441-1@oksbi</strong></p>

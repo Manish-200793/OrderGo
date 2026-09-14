@@ -72,7 +72,7 @@ async function initDatabase() {
         item_id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         description TEXT,
-        category ENUM('breakfast', 'lunch', 'snacks', 'beverages') NOT NULL,
+        category ENUM('breakfast', 'lunch', 'snacks', 'beverages', 'desserts') NOT NULL,
         price DECIMAL(10, 2) NOT NULL,
         stock INT DEFAULT 50,
         image_url VARCHAR(255),
@@ -86,6 +86,7 @@ async function initDatabase() {
       CREATE TABLE IF NOT EXISTS orders (
         order_id VARCHAR(50) PRIMARY KEY,
         user_id INT NOT NULL,
+        guest_name VARCHAR(255) DEFAULT NULL,
         total_price DECIMAL(10, 2) NOT NULL,
         status ENUM('pending', 'preparing', 'ready', 'completed', 'cancelled') DEFAULT 'pending',
         payment_method ENUM('cash', 'upi', 'card'),

@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useState } from 'react';
 import { formatPrice, CATEGORY_CONFIG } from '../utils/formatters';
+import { getMenuItemImage } from '../utils/menuImages';
 import './MenuCard.css';
 
 export default function MenuCard({ item }) {
@@ -13,14 +14,16 @@ export default function MenuCard({ item }) {
   const cartItem = cartItems.find(i => i.item_id === item.item_id);
   const quantity = cartItem?.quantity || 0;
 
+  const displayImageUrl = item.image_url || getMenuItemImage(item.name);
+
   return (
     <div className={`menu-card glass-card ${!item.is_available ? 'unavailable' : ''}`}>
       {item.is_daily_special && <span className="badge badge-special menu-card-badge">⭐ Today's Special</span>}
 
       <div className="menu-card-image">
-        {item.image_url && !imageError ? (
+        {displayImageUrl && !imageError ? (
           <img 
-            src={item.image_url} 
+            src={displayImageUrl} 
             alt={item.name} 
             className="menu-card-img"
             onError={() => setImageError(true)}

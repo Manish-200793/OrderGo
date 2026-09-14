@@ -10,7 +10,7 @@ async function getStaffOrders(req, res) {
 
   let query = `
     SELECT o.*, u.email as customer_email,
-           COALESCE(s.name, a.name, st.name) as customer_name,
+           COALESCE(o.guest_name, s.name, a.name, st.name) as customer_name,
            s.roll_number as customer_roll_number,
            COALESCE(s.phone, a.phone, st.phone) as customer_phone
     FROM orders o 
@@ -106,7 +106,7 @@ async function updateStaffOrderStatus(req, res) {
     // Fetch updated order with customer info
     const [updatedRows] = await db.query(`
       SELECT o.*, u.email as customer_email,
-             COALESCE(s.name, a.name, st.name) as customer_name,
+             COALESCE(o.guest_name, s.name, a.name, st.name) as customer_name,
              s.roll_number as customer_roll_number,
              COALESCE(s.phone, a.phone, st.phone) as customer_phone
       FROM orders o 

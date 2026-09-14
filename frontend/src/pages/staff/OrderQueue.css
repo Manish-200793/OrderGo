@@ -1,0 +1,182 @@
+/* Order Queue Display Styles (Theme Aware) */
+.queue-container {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  padding: var(--space-xl) var(--space-2xl);
+  font-family: var(--font-display, system-ui, sans-serif);
+  display: flex;
+  flex-direction: column;
+}
+
+.queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2xl);
+  padding-bottom: var(--space-md);
+  border-bottom: 2px solid var(--border-subtle);
+}
+
+.queue-header h1 {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  margin: 0;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.queue-time {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.queue-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  flex: 1;
+}
+
+.queue-col {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.queue-col-title {
+  text-align: center;
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  margin-top: 0;
+  margin-bottom: var(--space-xl);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.col-preparing .queue-col-title {
+  color: var(--status-pending, #f59e0b);
+}
+
+.col-ready .queue-col-title {
+  color: var(--status-completed, #10b981);
+}
+
+.queue-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  padding-right: var(--space-sm);
+}
+
+/* Custom Scrollbar for the queue lists */
+.queue-list::-webkit-scrollbar {
+  width: 6px;
+}
+.queue-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.queue-list::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 4px;
+}
+
+.queue-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.queue-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-preparing {
+  border-left: 6px solid var(--status-pending, #f59e0b);
+}
+
+.card-ready {
+  border-left: 6px solid var(--status-completed, #10b981);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+[data-theme="dark"] .card-ready {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.queue-number {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+}
+
+.card-ready .queue-number {
+  color: var(--status-completed, #10b981);
+}
+
+.queue-name {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+}
+
+.queue-empty {
+  text-align: center;
+  font-size: var(--font-size-lg);
+  color: var(--text-muted);
+  margin-top: var(--space-3xl);
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes pulse-text {
+  0% { opacity: 1; text-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+  50% { opacity: 0.8; text-shadow: 0 0 5px rgba(16, 185, 129, 0.1); }
+  100% { opacity: 1; text-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+}
+
+.pulse-text {
+  animation: pulse-text 2.5s infinite ease-in-out;
+}
+
+@keyframes pulse-fast {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(16, 185, 129, 0); }
+  50% { transform: scale(1.015); box-shadow: 0 0 10px rgba(16, 185, 129, 0.2); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.animate-pulse-fast {
+  animation: pulse-fast 2s infinite;
+}
+
+/* Responsiveness for laptops vs massive TVs */
+@media (min-width: 1920px) {
+  .queue-header h1 { font-size: 4rem; }
+  .queue-time { font-size: 3rem; }
+  .queue-col-title { font-size: 3.5rem; }
+  .queue-number { font-size: 3.5rem; }
+  .queue-name { font-size: 2.5rem; }
+}
+
+@media (max-width: 1024px) {
+  .queue-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+}
