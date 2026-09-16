@@ -1,71 +1,103 @@
-# 🍔 OrderGo
+# 🍔 OrderGo - College Canteen Management System
 
-OrderGo is a modern, responsive food ordering application built for campus cafeterias. It streamlines the entire process of ordering food, tracking preparation status, handling payments, and verifying order pickups using an integrated QR code scanner.
+**Specathon 3rd Prize Winning Project**
 
-## ✨ Features
-
-* **Role-Based Access Control:** Separate, dedicated interfaces for **Students**, **Staff**, and **Admins**.
-* **Modern UI/UX:** Premium dark-themed, glassmorphism design system built from scratch with custom CSS and smooth micro-animations.
-* **Live Order Tracking:** Real-time visual status updates (Pending → Preparing → Ready → Completed).
-* **UPI Payment Flow:** Generates automated UPI payment deep-links for instant mobile payments.
-* **Smart QR Code Handover:** Staff can use their laptop or mobile device's rear camera to scan a student's pickup QR code. The system securely validates the order and hands it over instantly.
-* **Admin Dashboard:** Complete control over menu items, pricing, stock availability, and sales analytics.
-
-## 🛠️ Tech Stack
-
-* **Frontend:** React (Vite), React Router, Context API, Lucide Icons, html5-qrcode (for scanner)
-* **Backend:** Node.js, Express.js
-* **Database:** SQLite (`better-sqlite3`)
-* **Authentication:** JSON Web Tokens (JWT), bcrypt
-* **Styling:** Vanilla CSS (CSS Variables, Flexbox/Grid, Animations)
-
-## 🚀 Getting Started
-
-To run OrderGo locally on your machine, follow these steps:
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/Manish-200793/OrderGo.git
-cd OrderGo
-```
-
-### 2. Setup the Backend
-Open a terminal and navigate to the backend folder:
-```bash
-cd backend
-npm install
-
-# Start the backend server (runs on port 5000 by default)
-npm run dev
-```
-*Note: The SQLite database will be automatically initialized and seeded with dummy data on the first run.*
-
-### 3. Setup the Frontend
-Open a **second** terminal window and navigate to the frontend folder:
-```bash
-cd frontend
-npm install
-
-# Start the frontend server with network access and SSL enabled
-npm run dev -- --host
-```
-
-### 4. Testing the App on Mobile (Camera Access)
-Because the app uses a camera for QR scanning, modern browsers require an HTTPS connection.
-1. When you start the frontend, Vite will provide a Network IP address (e.g., `https://192.168.x.x:5173`).
-2. Type this exact HTTPS address into your phone's browser.
-3. Your browser will warn you that the connection is not private (because it's a local development server).
-   * **Chrome/Android:** Click "Advanced" -> "Proceed to 192.168.x.x (unsafe)".
-   * **Safari/iPhone:** Click "Show Details" -> "visit this website" (at the very bottom).
-4. You can now use the Staff Dashboard on your laptop or phone to scan QR codes seamlessly!
-
-## 🔐 Default Test Accounts
-
-Use these accounts to test the different user roles in the application:
-
-* **Admin:** `admin@ordergo.com` / `admin123`
-* **Staff:** `staff1@ordergo.com` / `staff123`
-* **Student:** `student1@ordergo.com` / `student123`
+OrderGo is a highly scalable, real-time digital cafeteria management application designed to eliminate long queues, improve canteen efficiency, and provide transparent order tracking for college campuses.
 
 ---
-*Built with ❤️ by Manish*
+
+## 🛠 Tech Stack & Architecture
+
+This project is built using a modern **MERN-like stack** (using MySQL instead of MongoDB).
+
+### Frontend (Client)
+- **Framework:** React.js (Bootstrapped with Vite)
+- **Styling:** Vanilla CSS (Custom design system, glassmorphism UI)
+- **Routing:** `react-router-dom`
+- **Real-Time Communications:** `socket.io-client`
+- **Hosting:** Designed to be hosted on Netlify or Vercel
+
+### Backend (Server)
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Real-Time Communications:** `socket.io`
+- **Authentication:** JSON Web Tokens (JWT) & bcrypt for password hashing
+- **Caching:** `node-cache` (In-memory caching for high-speed menu delivery)
+- **Security:** `helmet`, `cors`, `express-rate-limit` (DDoS and spam protection)
+- **Hosting:** Designed to be hosted on Render.com
+
+### Database & External Services
+- **Database:** MySQL (Hosted on Aiven.io)
+  - Interacted with via `mysql2/promise` using Connection Pooling.
+- **Email Service:** SendGrid (Used for OTPs and notifications)
+
+---
+
+## ⚙️ How the Application Works (Data Flow)
+
+Understanding the data flow is crucial for maintaining and upgrading the app.
+
+1. **Authentication:** 
+   Users (Students, Staff, Admins) log in. The backend issues a JWT token. This token is stored in the browser's `localStorage` and sent in the `Authorization` header for all subsequent API requests.
+2. **Menu Loading (Optimized):**
+   When a student opens the menu, the request hits the `menuController.js`. Thanks to the `node-cache` implementation, if the menu was requested in the last 5 minutes, it is served instantly from RAM, completely bypassing the MySQL database.
+3. **Placing an Order:**
+   - The student adds items to the cart and selects a payment method (Cash or UPI).
+   - The frontend sends a POST request to `/api/orders`.
+   - The backend deducts stock from `menu_items`, creates a record in `orders`, creates individual records in `order_items`, and generates a unique QR Code.
+4. **Real-Time Kitchen Updates:**
+   - The moment the order is successfully saved to the database, the backend emits a `new_order` event via WebSockets (`socket.io`).
+   - The `StaffDashboard.jsx` (running on a tablet in the kitchen) is constantly listening to this WebSocket. It receives the event and instantly updates the screen with the new order—no manual refreshing required.
+5. **Pickup Verification:**
+   - When the food is ready, the student walks to the counter and shows their QR code.
+   - The staff uses the built-in QR Scanner in the Staff Dashboard to scan the code. This makes an API call to verify the order and marks it as `completed`.
+
+---
+
+## 🚀 Pre-Launch Checklist (What needs to be updated before going live)
+
+To launch this application to thousands of students, the following business and technical tasks must be completed:
+
+### 1. Payment Gateway Integration (Technical)
+Currently, the UPI payment option is a "mock" implementation. 
+- **Action Required:** You must integrate **Razorpay** or **Stripe**.
+- **Where to update:** 
+  - Create a Razorpay account and get API keys.
+  - Update `backend/src/routes/paymentRoutes.js` and `backend/src/controllers/paymentController.js` to handle webhook callbacks from Razorpay.
+  - Update the frontend Checkout process to render the Razorpay popup.
+
+### 2. Environment Variables & Production Secrets (Technical)
+Ensure that your `.env` files on Render and Netlify contain production-ready secrets, not local development keys.
+- **Action Required:** Ensure `JWT_SECRET`, `DATABASE_URL` (Aiven), and `SENDGRID_API_KEY` are securely set in the Render dashboard.
+
+### 3. Hardware Setup (Logistical)
+The WebSocket architecture requires the kitchen staff to have a dedicated, always-on screen.
+- **Action Required:** Secure a dedicated Android Tablet or monitor for the canteen kitchen. Ensure it is connected to a stable WiFi network so it never drops the Socket.io connection.
+
+### 4. Canteen Contractor Onboarding (Business)
+The app is useless if the kitchen staff refuses to look at the tablet.
+- **Action Required:** Train the canteen contractor on how to use the Staff Dashboard (marking items as preparing, scanning QR codes, marking items out of stock).
+
+---
+
+## 💻 Developer Setup (Running Locally)
+
+To run this project on your local machine:
+
+1. **Clone the repository**
+2. **Setup Backend:**
+   ```bash
+   cd backend
+   npm install
+   # Create a .env file with DATABASE_URL, JWT_SECRET, SENDGRID_API_KEY
+   npm run dev
+   ```
+3. **Setup Frontend:**
+   ```bash
+   cd frontend
+   npm install
+   # Create a .env file with VITE_API_URL=http://localhost:5000
+   npm run dev
+   ```
+
+*Documentation created for the OrderGo Team.*

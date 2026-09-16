@@ -1,4 +1,7 @@
 const { getDb } = require('../config/database');
+const NodeCache = require('node-cache');
+
+const menuCache = new NodeCache({ stdTTL: 300 }); // Cache for 5 minutes
 
 /**
  * GET /api/menu — List all menu items with optional filters
@@ -6,6 +9,12 @@ const { getDb } = require('../config/database');
 async function getMenuItems(req, res) {
   const db = getDb();
   const { category, search, available } = req.query;
+
+  const cacheKey = `menu_${category || 'all'}_${search || 'none'}_${available !== undefined ? available : 'all'}`;
+  const cachedData = menuCache.get(cacheKey);
+  if (cachedData) {
+    return res.json(cachedData);
+  }
 
   let query = 'SELECT * FROM menu_items WHERE 1=1';
   const params = [];
@@ -49,6 +58,7 @@ async function getMenuItems(req, res) {
       review_count: ratingMap[item.item_id]?.review_count || 0,
     }));
 
+    menuCache.set(cacheKey, result);
     res.json(result);
   } catch (error) {
     console.error(error);

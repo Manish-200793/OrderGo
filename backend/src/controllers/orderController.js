@@ -81,6 +81,19 @@ async function createOrder(req, res) {
       WHERE oi.order_id = ?
     `, [orderId]);
 
+    const io = req.app.get('io');
+    if (io) {
+      io.emit('new_order', {
+        order_id: orderId,
+        user_id: userId,
+        guest_name: guest_name,
+        total_price: totalPrice,
+        status: orderStatus,
+        payment_method: payment_method,
+        created_at: new Date().toISOString()
+      });
+    }
+
     res.status(201).json({
       message: 'Order placed successfully!',
       order: { ...orders[0], items: createdItems },

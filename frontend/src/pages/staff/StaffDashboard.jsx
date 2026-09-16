@@ -10,7 +10,10 @@ import { QRCodeSVG } from 'qrcode.react';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import './Staff.css';
 
-const REFRESH_INTERVAL = 15000; // 15 seconds
+import { io } from 'socket.io-client';
+
+const REFRESH_INTERVAL = 60000; // Changed to 60 seconds as fallback, since WebSockets handle real-time now
+
 
 export default function StaffDashboard() {
   const [orders, setOrders] = useState([]);
@@ -118,10 +121,24 @@ export default function StaffDashboard() {
     fetchData(hasLoaded);
   }, [fetchData]);
 
-  // Auto-refresh
+  // Auto-refresh fallback
   useEffect(() => {
     const interval = setInterval(() => fetchData(true), REFRESH_INTERVAL);
     return () => clearInterval(interval);
+  }, [fetchData]);
+
+  // WebSocket for real-time updates
+  useEffect(() => {
+    const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:5000', {
+      withCredentials: true
+    });
+
+    socket.on('new_order', (order) => {
+      // You can add a beep sound here later!
+      fetchData(true);
+    });
+
+    return () => socket.disconnect();
   }, [fetchData]);
 
   async function handleStatusUpdate(orderId, newStatus) {
