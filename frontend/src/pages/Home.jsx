@@ -130,7 +130,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="footer">
         <div className="container">
-          <p>© 2024 OrderGo. Built for campus life.</p>
+          <p>© 2026 OrderGo. Built for campus life.</p>
         </div>
       </footer>
     </div>
